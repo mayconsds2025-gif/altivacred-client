@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   RESET GLOBAL — ESSENCIAL PARA FULL-BLEED FUNCIONAR NO MOBILE
+   ============================================================ */
+
+/* Remove margem padrão do body e previne vazamento horizontal */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden !important;  /* evita scroll lateral */
+  overscroll-behavior-x: none;     /* Android e Chrome mobile fix */
+}
+
+/* Garante cálculo correto de larguras */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Evita que imagens causem overflow */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Remove highlight azul no mobile (opcional, melhora UX) */
+body {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Previne scrolling lateral causado pelo framer motion */
+body, html {
+  position: relative;
+}
+
+/* Tailwind já reseta muita coisa, mas isso garante um baseline sólido */
