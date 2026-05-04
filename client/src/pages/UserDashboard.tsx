@@ -33,15 +33,15 @@ type BancoId = "presenca_clt" | "presenca_fgts" | "c6" | "saque_cartao" | null;
 // ============================================================
 const CARD_CONFIG = {
   presenca_clt: {
-    enabled: true,        // 👈 Mude para false para desativar
+    enabled: false,        // 👈 Mude para false para desativar
     priority: 1,          // Ordem de exibição (menor = primeiro)
   },
   presenca_fgts: {
-    enabled: true,        // 👈 Mude para false para desativar
+    enabled: false,        // 👈 Mude para false para desativar
     priority: 2,
   },
   c6: {
-    enabled: true,        // 👈 Mude para false para desativar
+    enabled: false,        // 👈 Mude para false para desativar
     priority: 3,
   },
   saque_cartao: {
