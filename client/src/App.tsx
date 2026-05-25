@@ -9,9 +9,9 @@ import {
 } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import Home from "./pages/Home";
+import HomePage from "./pages/Home";
 import UserDashboard from "./pages/UserDashboard";
-import NovoSaqueDashboard from "./pages/NovoSaqueDashboard"; // ✅ IMPORTADO
+import NovoSaqueDashboard from "./pages/NovoSaqueDashboard";
 import Simulador from "./pages/Simulador";
 import Sobre from "./pages/Sobre";
 import ProdutoConsignadoCLT from "./pages/ProdutoConsignadoCLT";
@@ -38,15 +38,19 @@ function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // 🔒 AJUSTE: esconder navbar em /admin, /admin/crm e opcionalmente /novosaque se quiser foco total
-  if (location.pathname === "/admin" || location.pathname === "/admin/crm" || location.pathname === "/admin/crm/master") {
+  // 🔒 Esconder navbar em rotas admin
+  if (
+    location.pathname === "/admin" || 
+    location.pathname === "/admin/crm" || 
+    location.pathname === "/admin/crm/master"
+  ) {
     return null;
   }
 
   const links = [
-    { name: "Produtos", path: "/produto-consignado-clt" },
-    { name: "Por que a Nitz", path: "/sobre" },
-    { name: "Central de Ajuda", path: "/ajuda" },
+    { name: "Cidades", path: "/sobre" },
+    { name: "Como Funciona", path: "/produto-consignado-clt" },
+    { name: "Depoimentos", path: "/ajuda" },
   ];
 
   const handleGoogleLogin = async () => {
@@ -88,7 +92,7 @@ function Navbar() {
       });
 
       const from = location.state?.from || "/usuario/dashboard";
-navigate(from, { replace: true });
+      navigate(from, { replace: true });
 
     } catch (err) {
       console.error("[GOOGLE] Erro:", err);
@@ -102,21 +106,21 @@ navigate(from, { replace: true });
       transition={{ duration: 0.45, ease: "easeOut" }}
       className="
         fixed top-0 left-0 w-full z-50 backdrop-blur-xl
-        bg-[#0A2540]/80 border-b border-white/10 shadow-lg
+        bg-white/95 border-b border-[#A7F3D0] shadow-lg
       "
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center px-6 md:px-8 py-4">
         <Link to="/" className="flex items-center space-x-3">
           <motion.img
             src={logo}
-            alt="Nitz"
+            alt="Consultoria Interior SP"
             className="w-40 md:w-52 h-auto object-contain drop-shadow-lg"
             whileHover={{ scale: 1.03 }}
             transition={{ duration: 0.2 }}
           />
         </Link>
 
-        <div className="hidden md:flex items-center space-x-10 text-base font-medium ml-auto mr-6">
+        <div className="hidden md:flex items-center space-x-10 text-base font-semibold ml-auto mr-6">
           {links.map((link) => (
             <motion.div
               key={link.name}
@@ -127,8 +131,8 @@ navigate(from, { replace: true });
                 to={link.path}
                 className={`transition-all duration-300 ${
                   location.pathname === link.path
-                    ? "text-[#7BD4FF] font-semibold"
-                    : "text-white"
+                    ? "text-[#047857] font-bold"
+                    : "text-[#065f46] hover:text-[#047857]"
                 }`}
               >
                 {link.name}
@@ -136,7 +140,7 @@ navigate(from, { replace: true });
 
               <span
                 className={`
-                  absolute left-0 bottom-[-6px] h-[2px] bg-[#7BD4FF] 
+                  absolute left-0 bottom-[-6px] h-[2.5px] bg-[#10B981] rounded-full
                   transition-all duration-300
                   ${
                     location.pathname === link.path
@@ -157,12 +161,12 @@ navigate(from, { replace: true });
                   <img
                     src={user.foto}
                     alt="Foto"
-                    className="w-10 h-10 rounded-full border border-[#7BD4FF] shadow-md"
+                    className="w-10 h-10 rounded-full border-2 border-[#10B981] shadow-md"
                   />
                 ) : (
                   <div
                     className="
-                    bg-gradient-to-br from-[#7BD4FF] to-[#3B82F6]
+                    bg-gradient-to-br from-[#10B981] to-[#047857]
                     w-10 h-10 flex items-center justify-center
                     rounded-full text-white font-bold shadow-lg
                   "
@@ -170,7 +174,7 @@ navigate(from, { replace: true });
                     {user.nome[0]?.toUpperCase()}
                   </div>
                 )}
-                <span className="text-[#CFE9FF] font-semibold">
+                <span className="text-[#065f46] font-semibold">
                   Olá, {user.nome.split(" ")[0]}!
                 </span>
               </div>
@@ -184,8 +188,8 @@ navigate(from, { replace: true });
                 whileTap={{ scale: 0.96 }}
                 className="
                   px-5 py-2 rounded-full font-semibold
-                  bg-white/10 border border-white/20 text-[#7BD4FF]
-                  hover:bg-white/20 transition-all shadow-md
+                  bg-[#F0FDF4] border border-[#10B981] text-[#047857]
+                  hover:bg-[#ECFDF5] transition-all shadow-md
                 "
               >
                 Sair
@@ -197,22 +201,22 @@ navigate(from, { replace: true });
               whileHover={{ scale: 1.06 }}
               whileTap={{ scale: 0.96 }}
               className="
-                flex items-center gap-2 bg-white text-[#0A2540]
-                font-semibold py-2 px-6 rounded-full shadow-lg
-                hover:opacity-90 transition-all
+                flex items-center gap-2 bg-[#047857] text-white
+                font-bold py-2.5 px-6 rounded-full shadow-lg
+                hover:bg-[#065f46] transition-all
               "
             >
               <img src={googleLogo} alt="Google" className="w-5 h-5" />
-              Entrar
+              Começar
             </motion.button>
           )}
         </div>
 
         <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
           {menuOpen ? (
-            <X className="w-7 h-7 text-white" />
+            <X className="w-7 h-7 text-[#065f46]" />
           ) : (
-            <Menu className="w-7 h-7 text-white" />
+            <Menu className="w-7 h-7 text-[#065f46]" />
           )}
         </button>
       </div>
@@ -225,7 +229,7 @@ navigate(from, { replace: true });
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.25 }}
             className="
-              md:hidden backdrop-blur-2xl bg-[#0A2540]/95 border-t border-white/10
+              md:hidden backdrop-blur-2xl bg-white/98 border-t border-[#A7F3D0]
             "
           >
             <div className="flex flex-col items-center py-6 space-y-6 text-lg font-semibold">
@@ -234,7 +238,7 @@ navigate(from, { replace: true });
                   key={link.name}
                   to={link.path}
                   onClick={() => setMenuOpen(false)}
-                  className="text-white hover:text-[#7BD4FF] transition"
+                  className="text-[#065f46] hover:text-[#047857] transition"
                 >
                   {link.name}
                 </Link>
@@ -248,8 +252,10 @@ navigate(from, { replace: true });
                     navigate("/");
                   }}
                   className="
-                    text-[#7BD4FF] border border-[#7BD4FF]
-                    py-2 px-6 rounded-full"
+                    text-[#047857] border-2 border-[#10B981]
+                    py-2 px-6 rounded-full font-semibold
+                    hover:bg-[#F0FDF4] transition
+                  "
                 >
                   Sair
                 </button>
@@ -260,12 +266,13 @@ navigate(from, { replace: true });
                     handleGoogleLogin();
                   }}
                   className="
-                    flex items-center gap-2 bg-white text-[#0A2540]
-                    py-2 px-6 rounded-full shadow-md
+                    flex items-center gap-2 bg-[#047857] text-white
+                    py-2.5 px-6 rounded-full shadow-md font-bold
+                    hover:bg-[#065f46] transition
                   "
                 >
                   <img src={googleLogo} alt="Google" className="w-5 h-5" />
-                  Entrar
+                  Começar
                 </button>
               )}
             </div>
@@ -283,15 +290,15 @@ function AppContent() {
   const location = useLocation();
   const isAdmin =
     location.pathname === "/admin" ||
-    location.pathname === "/admin/crm"||
+    location.pathname === "/admin/crm" ||
     location.pathname === "/admin/crm/master";
 
   return (
     <>
       <Navbar />
-      <div className={isAdmin ? "" : "pt-20 bg-[#F9FAFB] min-h-screen"}>
+      <div className={isAdmin ? "" : "pt-20 bg-white min-h-screen"}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/sobre" element={<Sobre />} />
           <Route path="/ajuda" element={<CentralAjuda />} />
           <Route path="/simulador" element={<Simulador />} />
@@ -312,16 +319,15 @@ function AppContent() {
             }
           />
 
-          {/* ✅ NOVA ROTA FOCADA NO NOVO SAQUE */}
-        <Route
-  path="/novosaque"
-  element={<NovoSaqueDashboard />}
-/>
-
+          {/* ROTA NOVO SAQUE */}
+          <Route
+            path="/novosaque"
+            element={<NovoSaqueDashboard />}
+          />
 
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/crm" element={<CRM />} />
-		  <Route path="/admin/crm/master" element={<MasterCRM />} />
+          <Route path="/admin/crm/master" element={<MasterCRM />} />
         </Routes>
       </div>
     </>
