@@ -11,14 +11,16 @@ import {
   ArrowRight,
   Phone,
   Mail,
-  Calendar,
   Star,
   Shield,
   Sparkles,
   Building2,
   GraduationCap,
   TreePine,
-  Landmark
+  Landmark,
+  DollarSign,
+  Clock,
+  Award
 } from "lucide-react";
 import {
   getAuth,
@@ -120,22 +122,22 @@ const HomePage: React.FC = () => {
     {
       name: "Ana Paula Silva",
       role: "Engenheira de Software",
-      city: "Mudou para Campinas",
-      text: "A consultoria foi fundamental para encontrar o bairro ideal. Hoje trabalho remoto em um ambiente tranquilo, com qualidade de vida que nunca tive em SP.",
+      city: "Campinas",
+      text: "Melhor decisão que tomei! Hoje trabalho remoto em um ambiente tranquilo, com qualidade de vida que nunca tive em SP.",
       rating: 5,
     },
     {
       name: "Carlos Mendes",
       role: "Gerente Comercial",
-      city: "Mudou para Paulínia",
-      text: "Excelente custo-benefício! A equipe me ajudou desde a escolha do bairro até indicações de escolas para meus filhos. Estamos muito felizes aqui.",
+      city: "Paulínia",
+      text: "Excelente custo-benefício! Meus filhos estudam em ótimas escolas e ainda sobra dinheiro no final do mês. Estamos muito felizes aqui.",
       rating: 5,
     },
     {
       name: "Fernanda Costa",
       role: "Designer",
-      city: "Mudou para Hortolândia",
-      text: "Processo totalmente personalizado. Entenderam minhas necessidades e me guiaram em cada etapa. Hoje tenho mais tempo com minha família.",
+      city: "Hortolândia",
+      text: "Processo simples e rápido. Em 3 meses já estava morando no interior. Hoje tenho mais tempo com minha família e menos estresse.",
       rating: 5,
     },
   ];
@@ -194,7 +196,7 @@ const HomePage: React.FC = () => {
               >
                 <Sparkles className="w-4 h-4 text-emerald-300" />
                 <span className="text-sm font-semibold text-emerald-100">
-                  Consultoria especializada em relocação
+                  Guia completo para sua mudança
                 </span>
               </motion.div>
 
@@ -219,7 +221,7 @@ const HomePage: React.FC = () => {
                   className="group relative bg-white text-emerald-700 font-bold py-4 px-10 rounded-full overflow-hidden shadow-2xl"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-2">
-                    Agendar Consultoria Gratuita
+                    Explorar as Cidades
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </span>
                   <div className="absolute inset-0 bg-gradient-to-r from-emerald-50 to-white opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -230,17 +232,17 @@ const HomePage: React.FC = () => {
                   whileTap={{ scale: 0.98 }}
                   className="flex items-center justify-center gap-2 bg-white/10 backdrop-blur-md border-2 border-white/30 text-white font-semibold py-4 px-8 rounded-full hover:bg-white/20 transition-all"
                 >
-                  <Phone className="w-5 h-5" />
-                  Falar com especialista
+                  <MapPin className="w-5 h-5" />
+                  Ver no mapa
                 </motion.button>
               </div>
 
               {/* Stats rápidos */}
               <div className="flex gap-8 pt-6">
                 {[
-                  { num: "500+", label: "Famílias relocadas" },
-                  { num: "4", label: "Cidades atendidas" },
-                  { num: "98%", label: "Satisfação" },
+                  { num: "4", label: "Cidades destacadas" },
+                  { num: "45min", label: "De São Paulo" },
+                  { num: "40%", label: "Mais em conta" },
                 ].map((stat, i) => (
                   <motion.div
                     key={i}
@@ -271,18 +273,18 @@ const HomePage: React.FC = () => {
                       <CheckCircle className="w-7 h-7 text-white" />
                     </div>
                     <div>
-                      <div className="text-white font-bold text-lg">Processo Garantido</div>
-                      <div className="text-emerald-200 text-sm">100% personalizado</div>
+                      <div className="text-white font-bold text-lg">Vantagens Garantidas</div>
+                      <div className="text-emerald-200 text-sm">Mudança inteligente</div>
                     </div>
                   </div>
 
                   <div className="space-y-4">
                     {[
-                      "Análise de perfil e necessidades",
-                      "Pesquisa de bairros ideais",
-                      "Visitas guiadas presenciais",
-                      "Conexão com parceiros locais",
-                      "Suporte pós-mudança",
+                      "Menos trânsito, mais qualidade",
+                      "Custo de vida reduzido",
+                      "Segurança e tranquilidade",
+                      "Próximo da capital",
+                      "Infraestrutura completa",
                     ].map((item, i) => (
                       <motion.div
                         key={i}
@@ -306,7 +308,7 @@ const HomePage: React.FC = () => {
                   transition={{ duration: 3, repeat: Infinity }}
                   className="absolute -top-4 -right-4 bg-gradient-to-br from-amber-400 to-orange-500 text-white font-black text-sm px-6 py-3 rounded-full shadow-xl"
                 >
-                  ⭐ 1ª consulta GRÁTIS
+                  ⭐ Guia 100% Gratuito
                 </motion.div>
               </div>
             </motion.div>
@@ -336,17 +338,17 @@ const HomePage: React.FC = () => {
           <div className="flex flex-wrap items-center justify-center gap-8 text-sm">
             <div className="flex items-center gap-2 text-emerald-700">
               <Shield className="w-5 h-5" />
-              <span className="font-semibold">Consultoria certificada</span>
+              <span className="font-semibold">Informações verificadas</span>
             </div>
             <div className="w-px h-6 bg-emerald-200 hidden sm:block" />
             <div className="flex items-center gap-2 text-emerald-700">
               <Star className="w-5 h-5 fill-emerald-500" />
-              <span className="font-semibold">4.9/5 avaliação média</span>
+              <span className="font-semibold">Dados atualizados 2024</span>
             </div>
             <div className="w-px h-6 bg-emerald-200 hidden sm:block" />
             <div className="flex items-center gap-2 text-emerald-700">
-              <Users className="w-5 h-5" />
-              <span className="font-semibold">500+ famílias atendidas</span>
+              <MapPin className="w-5 h-5" />
+              <span className="font-semibold">4 cidades mapeadas</span>
             </div>
           </div>
         </div>
@@ -409,7 +411,7 @@ const HomePage: React.FC = () => {
                 color: "from-blue-500 to-cyan-500",
               },
               {
-                icon: <TrendingUp className="w-16 h-16" />,
+                icon: <DollarSign className="w-16 h-16" />,
                 title: "Economia inteligente",
                 desc: "Imóveis até 40% mais acessíveis, menor custo de vida e mais espaço para sua família crescer.",
                 stats: ["Economia de 30-40%/mês", "Imóveis espaçosos"],
@@ -608,141 +610,109 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* ========== COMO FUNCIONA ========== */}
+      {/* ========== COMPARATIVO COM SP ========== */}
       <section className="py-24 bg-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            {/* Esquerda - Conteúdo */}
-            <div>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 font-bold text-sm px-5 py-2 rounded-full mb-6"
-              >
-                <Briefcase className="w-4 h-4" />
-                Metodologia comprovada
-              </motion.div>
+          <div className="text-center mb-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 font-bold text-sm px-5 py-2 rounded-full mb-6"
+            >
+              <TrendingUp className="w-4 h-4" />
+              Comparação inteligente
+            </motion.div>
 
-              <motion.h2
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="text-4xl md:text-5xl font-black text-emerald-900 mb-6"
-              >
-                Sua mudança planejada do <span className="text-emerald-600">início ao fim</span>
-              </motion.h2>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-4xl md:text-5xl font-black text-emerald-900 mb-6"
+            >
+              Interior vs. Capital
+            </motion.h2>
 
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-                className="text-lg text-gray-600 leading-relaxed mb-8"
-              >
-                Nossa consultoria completa e personalizada garante que você tome a melhor decisão e faça uma transição tranquila para o interior, sem estresse ou imprevistos.
-              </motion.p>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="text-xl text-gray-600 max-w-2xl mx-auto"
+            >
+              Veja as diferenças que realmente importam
+            </motion.p>
+          </div>
 
-              <div className="flex gap-4 mb-8">
-                <button
-                  onClick={handleGoogleLogin}
-                  className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold py-4 px-8 rounded-full shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center gap-2"
-                >
-                  Começar agora
-                  <ArrowRight className="w-5 h-5" />
-                </button>
-
-                <button className="bg-white border-2 border-emerald-600 text-emerald-700 font-bold py-4 px-8 rounded-full hover:bg-emerald-50 transition-all flex items-center gap-2">
-                  <Calendar className="w-5 h-5" />
-                  Agendar reunião
-                </button>
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* São Paulo */}
+            <motion.div
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl p-8 border-2 border-gray-300"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 bg-gray-600 rounded-full flex items-center justify-center">
+                  <Building2 className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-2xl font-black text-gray-800">São Paulo Capital</h3>
               </div>
 
-              {/* Garantias */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-4">
                 {[
-                  { icon: <Shield />, text: "Processo 100% seguro" },
-                  { icon: <Star />, text: "Satisfação garantida" },
+                  { icon: <Clock />, text: "2-3h/dia no trânsito", negative: true },
+                  { icon: <DollarSign />, text: "Custo de vida 40% maior", negative: true },
+                  { icon: <Home />, text: "Imóveis pequenos e caros", negative: true },
+                  { icon: <Heart />, text: "Alto nível de estresse", negative: true },
+                  { icon: <TreePine />, text: "Poucas áreas verdes", negative: true },
                 ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3 p-4 bg-emerald-50 rounded-xl">
-                    <div className="w-10 h-10 bg-emerald-600 text-white rounded-lg flex items-center justify-center flex-shrink-0">
+                  <div key={i} className="flex items-center gap-3 text-gray-700">
+                    <div className="w-8 h-8 bg-red-100 text-red-600 rounded-lg flex items-center justify-center flex-shrink-0">
                       {item.icon}
                     </div>
-                    <span className="text-sm font-bold text-emerald-900">{item.text}</span>
+                    <span className="font-medium">{item.text}</span>
                   </div>
                 ))}
               </div>
-            </div>
+            </motion.div>
 
-            {/* Direita - Steps */}
-            <div className="relative">
-              {/* Linha conectora */}
-              <div className="absolute left-8 top-12 bottom-12 w-1 bg-gradient-to-b from-emerald-400 via-teal-400 to-emerald-400 rounded-full hidden md:block" />
+            {/* Interior */}
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-3xl p-8 border-2 border-emerald-300 relative overflow-hidden"
+            >
+              {/* Badge destaque */}
+              <div className="absolute top-4 right-4 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-black text-xs px-4 py-2 rounded-full">
+                MELHOR ESCOLHA
+              </div>
 
-              <div className="space-y-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 bg-gradient-to-br from-emerald-600 to-teal-600 rounded-full flex items-center justify-center">
+                  <TreePine className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-2xl font-black text-emerald-900">Interior Paulista</h3>
+              </div>
+
+              <div className="space-y-4">
                 {[
-                  {
-                    num: "01",
-                    title: "Análise do seu perfil",
-                    desc: "Entendemos necessidades, objetivos, orçamento e estilo de vida para indicar a cidade perfeita.",
-                  },
-                  {
-                    num: "02",
-                    title: "Pesquisa estratégica",
-                    desc: "Mapeamos bairros, infraestrutura, segurança, escolas e opções de moradia sob medida.",
-                  },
-                  {
-                    num: "03",
-                    title: "Visitas personalizadas",
-                    desc: "Organizamos tours presenciais ou virtuais pelos bairros e imóveis selecionados.",
-                  },
-                  {
-                    num: "04",
-                    title: "Rede de parceiros",
-                    desc: "Indicamos corretores, empresas de mudança, escolas, médicos e prestadores de confiança.",
-                  },
-                  {
-                    num: "05",
-                    title: "Planejamento completo",
-                    desc: "Apoio em documentação, logística, adaptação e todos os detalhes da mudança.",
-                  },
-                  {
-                    num: "06",
-                    title: "Suporte contínuo",
-                    desc: "Acompanhamento pós-mudança para garantir que você se sinta em casa.",
-                  },
-                ].map((step, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: 40 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: i * 0.1 }}
-                    whileHover={{ x: 8 }}
-                    className="relative bg-gradient-to-br from-white to-emerald-50 rounded-2xl p-6 border-2 border-emerald-100 hover:border-emerald-300 shadow-lg hover:shadow-xl transition-all duration-300 group"
-                  >
-                    <div className="flex items-start gap-4">
-                      {/* Número */}
-                      <div className="relative z-10 w-14 h-14 bg-gradient-to-br from-emerald-600 to-teal-600 text-white rounded-xl flex items-center justify-center font-black text-xl shadow-lg group-hover:scale-110 transition-transform flex-shrink-0">
-                        {step.num}
-                      </div>
-
-                      <div className="flex-1">
-                        <h4 className="text-xl font-black text-emerald-900 mb-2 group-hover:text-emerald-600 transition-colors">
-                          {step.title}
-                        </h4>
-                        <p className="text-gray-600 leading-relaxed">
-                          {step.desc}
-                        </p>
-                      </div>
+                  { icon: <Clock />, text: "30min/dia no trânsito", positive: true },
+                  { icon: <DollarSign />, text: "Economia de até 40%", positive: true },
+                  { icon: <Home />, text: "Imóveis espaçosos e acessíveis", positive: true },
+                  { icon: <Heart />, text: "Qualidade de vida superior", positive: true },
+                  { icon: <TreePine />, text: "Natureza e áreas verdes", positive: true },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-3 text-emerald-900">
+                    <div className="w-8 h-8 bg-emerald-200 text-emerald-700 rounded-lg flex items-center justify-center flex-shrink-0">
+                      {item.icon}
                     </div>
-
-                    {/* Efeito hover */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/5 to-teal-400/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </motion.div>
+                    <span className="font-semibold">{item.text}</span>
+                  </div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -773,7 +743,7 @@ const HomePage: React.FC = () => {
               viewport={{ once: true }}
               className="text-4xl md:text-5xl lg:text-6xl font-black mb-6"
             >
-              O que nossos clientes dizem
+              Quem já fez a mudança
             </motion.h2>
 
             <motion.p
@@ -783,7 +753,7 @@ const HomePage: React.FC = () => {
               transition={{ delay: 0.2 }}
               className="text-xl text-emerald-100 max-w-2xl mx-auto"
             >
-              Transformamos vidas através de mudanças bem planejadas
+              Conheça pessoas que transformaram suas vidas
             </motion.p>
           </div>
 
@@ -816,7 +786,7 @@ const HomePage: React.FC = () => {
                   <div className="text-emerald-300 text-sm font-semibold">{testimonial.role}</div>
                   <div className="text-emerald-200 text-sm mt-1 flex items-center gap-1">
                     <MapPin className="w-3 h-3" />
-                    {testimonial.city}
+                    Mora em {testimonial.city}
                   </div>
                 </div>
               </motion.div>
@@ -857,15 +827,15 @@ const HomePage: React.FC = () => {
             {/* Badge */}
             <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/30 rounded-full px-6 py-3">
               <Sparkles className="w-5 h-5 text-amber-300" />
-              <span className="font-bold text-lg">Oferta por tempo limitado</span>
+              <span className="font-bold text-lg">Comece sua jornada hoje</span>
             </div>
 
             <h2 className="text-5xl md:text-6xl lg:text-7xl font-black leading-tight">
-              Pronto para transformar<br />sua vida?
+              Pronto para mudar<br />de vida?
             </h2>
 
             <p className="text-2xl md:text-3xl text-emerald-50 max-w-3xl mx-auto leading-relaxed font-light">
-              Agende uma <strong className="font-bold">consultoria 100% gratuita</strong> e descubra como conquistar a qualidade de vida que você sempre sonhou.
+              Explore as <strong className="font-bold">melhores cidades</strong> do interior paulista e descubra onde você quer construir seu futuro.
             </p>
 
             {/* CTAs */}
@@ -876,7 +846,7 @@ const HomePage: React.FC = () => {
                 whileTap={{ scale: 0.98 }}
                 className="group bg-white text-emerald-700 font-black py-5 px-12 rounded-full text-xl shadow-2xl hover:shadow-3xl transition-all duration-300 flex items-center justify-center gap-3"
               >
-                Quero minha consultoria grátis
+                Explorar as Cidades
                 <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
               </motion.button>
 
@@ -885,17 +855,17 @@ const HomePage: React.FC = () => {
                 whileTap={{ scale: 0.98 }}
                 className="bg-white/10 backdrop-blur-md border-2 border-white/40 text-white font-bold py-5 px-10 rounded-full hover:bg-white/20 transition-all flex items-center justify-center gap-2 text-lg"
               >
-                <Phone className="w-5 h-5" />
-                (19) 99999-9999
+                <MapPin className="w-5 h-5" />
+                Ver no Mapa
               </motion.button>
             </div>
 
             {/* Garantias rápidas */}
             <div className="flex flex-wrap justify-center gap-6 pt-12 text-emerald-100">
               {[
-                "✓ Sem compromisso",
-                "✓ Totalmente gratuito",
-                "✓ Resposta em 24h",
+                "✓ Guia completo",
+                "✓ Informações atualizadas",
+                "✓ 100% gratuito",
               ].map((item, i) => (
                 <motion.div
                   key={i}
@@ -920,17 +890,17 @@ const HomePage: React.FC = () => {
             {/* Coluna 1 - Sobre */}
             <div className="md:col-span-2">
               <h3 className="text-2xl font-black text-white mb-4">
-                Consultoria Interior SP
+                Interior Paulista
               </h3>
               <p className="text-emerald-200 leading-relaxed mb-6">
-                Especialistas em relocação para o interior paulista. Ajudamos você a encontrar qualidade de vida, segurança e prosperidade.
+                Seu guia completo para descobrir e explorar as melhores cidades do interior de São Paulo. Informações atualizadas e verificadas.
               </p>
               <div className="flex gap-4">
                 <a href="#" className="w-10 h-10 bg-emerald-800 hover:bg-emerald-700 rounded-full flex items-center justify-center transition-colors">
                   <Mail className="w-5 h-5" />
                 </a>
                 <a href="#" className="w-10 h-10 bg-emerald-800 hover:bg-emerald-700 rounded-full flex items-center justify-center transition-colors">
-                  <Phone className="w-5 h-5" />
+                  <MapPin className="w-5 h-5" />
                 </a>
               </div>
             </div>
@@ -949,24 +919,25 @@ const HomePage: React.FC = () => {
               </ul>
             </div>
 
-            {/* Coluna 3 - Contato */}
+            {/* Coluna 3 - Links */}
             <div>
-              <h4 className="text-white font-bold mb-4">Contato</h4>
-              <ul className="space-y-3 text-emerald-200">
-                <li className="flex items-center gap-2">
-                  <Phone className="w-4 h-4" />
-                  (19) 99999-9999
+              <h4 className="text-white font-bold mb-4">Recursos</h4>
+              <ul className="space-y-2 text-emerald-200">
+                <li>
+                  <button className="hover:text-white transition-colors">Guia de mudança</button>
                 </li>
-                <li className="flex items-center gap-2">
-                  <Mail className="w-4 h-4" />
-                  contato@exemplo.com
+                <li>
+                  <button className="hover:text-white transition-colors">Calculadora</button>
+                </li>
+                <li>
+                  <button className="hover:text-white transition-colors">Blog</button>
                 </li>
               </ul>
             </div>
           </div>
 
           <div className="border-t border-emerald-800 mt-12 pt-8 text-center text-emerald-300 text-sm">
-            © 2024 Consultoria Interior SP. Todos os direitos reservados.
+            © 2024 Interior Paulista. Todos os direitos reservados.
           </div>
         </div>
       </footer>
