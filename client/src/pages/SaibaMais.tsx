@@ -6,20 +6,16 @@ import {
   DollarSign,
   Users,
   Briefcase,
-  Calendar,
   Phone,
-  Mail,
-  ArrowRight,
   CheckCircle,
   User,
-  Building2,
-  TrendingUp,
+  ArrowRight,
   Shield,
   Sparkles,
   Clock,
 } from "lucide-react";
 
-const CapturaLead: React.FC = () => {
+const SaibaMais: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -61,9 +57,7 @@ const CapturaLead: React.FC = () => {
   const cidades = ["Campinas", "Hortolândia", "Paulínia", "Sumaré"];
 
   const handleChange = (
-    e: React.ChangeEvent
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -784,9 +778,9 @@ const CapturaLead: React.FC = () => {
           className="mt-12 flex flex-wrap justify-center gap-8 text-sm text-gray-600"
         >
           {[
-            { icon: <Shield />, text: "Dados 100% Seguros" },
-            { icon: <Clock />, text: "Resposta em 24h" },
-            { icon: <CheckCircle />, text: "Sem Compromisso" },
+            { icon: <Shield className="w-5 h-5" />, text: "Dados 100% Seguros" },
+            { icon: <Clock className="w-5 h-5" />, text: "Resposta em 24h" },
+            { icon: <CheckCircle className="w-5 h-5" />, text: "Sem Compromisso" },
           ].map((item, i) => (
             <div key={i} className="flex items-center gap-2">
               <div className="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center">
@@ -801,4 +795,4 @@ const CapturaLead: React.FC = () => {
   );
 };
 
-export default CapturaLead;
+export default SaibaMais;
