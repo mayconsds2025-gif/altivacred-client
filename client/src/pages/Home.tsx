@@ -13,7 +13,7 @@ import "../firebaseConfig";
 // Imagens - você pode substituir por fotos do interior/cidades
 import hero from "../assets/hero.jpg";
 
-const Home: React.FC = () => {
+const HomePage: React.FC = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -429,4 +429,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default HomePage;
