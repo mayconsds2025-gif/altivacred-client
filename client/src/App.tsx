@@ -114,7 +114,7 @@ function Navbar() {
           <motion.img
             src={logo}
             alt="Consultoria Interior SP"
-            className="w-40 md:w-52 h-auto object-contain drop-shadow-lg"
+            className="w-40 md:w-52 h-auto object-contain"
             whileHover={{ scale: 1.03 }}
             transition={{ duration: 0.2 }}
           />
