@@ -260,7 +260,7 @@ const SaibaMais: React.FC = () => {
                   </span>
                 </div>
 
-                {index < steps.length - 1 && (
+                {index < (steps.length - 1) && 
                   <div className="flex-1 h-1 mx-2 bg-gray-200 rounded-full overflow-hidden">
                     <motion.div
                       initial={{ width: "0%" }}
