@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ShieldCheck,
@@ -28,6 +28,26 @@ const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+
+  // Se o usuário clicou num link da navbar estando em outra página,
+  // a navbar navega pra cá passando o id da seção pelo state — aqui a gente rola até ela.
+  useEffect(() => {
+    const scrollTo = (location.state as { scrollTo?: string } | null)?.scrollTo;
+    if (!scrollTo) return;
+
+    const timer = setTimeout(() => {
+      const el = document.getElementById(scrollTo);
+      if (el) {
+        const NAVBAR_OFFSET = 96;
+        const y = el.getBoundingClientRect().top + window.scrollY - NAVBAR_OFFSET;
+        window.scrollTo({ top: y, behavior: "smooth" });
+      }
+      // Limpa o state pra não rolar de novo se o usuário voltar pra essa página depois
+      navigate(location.pathname, { replace: true, state: {} });
+    }, 120);
+
+    return () => clearTimeout(timer);
+  }, [location.state, location.pathname, navigate]);
 
   // Login Google
   const handleGoogleLogin = async () => {
@@ -262,7 +282,7 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* COMO FUNCIONA */}
-      <section className="py-20 bg-[#F9FAFB]">
+      <section id="como-funciona" className="py-20 bg-[#F9FAFB] scroll-mt-24">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="grid md:grid-cols-12 gap-10 items-start">
             <div className="md:col-span-5">
@@ -389,7 +409,7 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* DEPOIMENTOS */}
-      <section className="py-20 bg-white">
+      <section id="depoimentos" className="py-20 bg-white scroll-mt-24">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -438,7 +458,7 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* FAQ */}
-      <section className="py-20 bg-[#F9FAFB]">
+      <section id="duvidas-frequentes" className="py-20 bg-[#F9FAFB] scroll-mt-24">
         <div className="max-w-3xl mx-auto px-6 md:px-12">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}

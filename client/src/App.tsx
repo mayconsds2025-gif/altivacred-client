@@ -8,7 +8,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ArrowRight } from "lucide-react";
+import { Menu, X, ArrowRight, MessageCircle } from "lucide-react";
 import HomePage from "./pages/Home";
 import UserDashboard from "./pages/UserDashboard";
 import NovoSaqueDashboard from "./pages/NovoSaqueDashboard";
@@ -29,6 +29,22 @@ import CarEquity from "./pages/CarEquity";
 
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import "./firebaseConfig";
+
+// Número de WhatsApp para contato direto (formato internacional, sem símbolos)
+const WHATSAPP_NUMBER = "5511959273817";
+const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+  "Olá! Gostaria de saber mais sobre o crédito CLT."
+)}`;
+
+// Altura aproximada da navbar fixa, usada para compensar o scroll até as seções
+const NAVBAR_OFFSET = 96;
+
+function scrollToId(id: string) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const y = el.getBoundingClientRect().top + window.scrollY - NAVBAR_OFFSET;
+  window.scrollTo({ top: y, behavior: "smooth" });
+}
 
 // =======================================================================
 // NAVBAR PREMIUM (COMPONENTE DE NAVEGAÇÃO SUPERIOR)
@@ -67,11 +83,22 @@ function Navbar() {
     return null;
   }
 
-  const links = [
-    { name: "Cidades", path: "/sobre" },
-    { name: "Como funciona", path: "/produto-consignado-clt" },
-    { name: "Depoimentos", path: "/ajuda" },
+  // Links que apontam para seções da Home (scroll suave), não páginas separadas
+  const sectionLinks = [
+    { name: "Como funciona", id: "como-funciona" },
+    { name: "Depoimentos", id: "depoimentos" },
+    { name: "Dúvidas frequentes", id: "duvidas-frequentes" },
   ];
+
+  // Navega até a seção — se já estiver na Home, só rola; se não, vai pra Home e rola em seguida
+  const handleSectionClick = (id: string) => {
+    setMenuOpen(false);
+    if (location.pathname === "/") {
+      scrollToId(id);
+    } else {
+      navigate("/", { state: { scrollTo: id } });
+    }
+  };
 
   const handleGoogleLogin = async () => {
     try {
@@ -157,44 +184,42 @@ function Navbar() {
             />
           </Link>
 
-          {/* Links Desktop */}
-          <div className="hidden md:flex items-center gap-2">
-            {links.map((link) => (
-              <Link
-                key={link.name}
-                to={link.path}
+          {/* Links Desktop — âncoras para seções da Home */}
+          <div className="hidden md:flex items-center gap-1">
+            {sectionLinks.map((link) => (
+              <button
+                key={link.id}
+                onClick={() => handleSectionClick(link.id)}
                 className="relative group px-4 py-2"
               >
-                <span
-                  className={`
-                    text-[15px] font-medium transition-colors duration-300
-                    ${
-                      location.pathname === link.path
-                        ? "text-emerald-700"
-                        : "text-gray-600 group-hover:text-emerald-700"
-                    }
-                  `}
-                >
+                <span className="text-[15px] font-medium text-gray-600 group-hover:text-emerald-700 transition-colors duration-300">
                   {link.name}
                 </span>
 
-                {/* Indicador — cresce a partir do centro */}
                 <motion.span
                   className="absolute left-1/2 bottom-0 h-[2px] bg-emerald-600 rounded-full"
                   style={{ translateX: "-50%" }}
                   initial={false}
-                  animate={{
-                    width: location.pathname === link.path ? "60%" : "0%",
-                  }}
+                  animate={{ width: "0%" }}
                   whileHover={{ width: "60%" }}
                   transition={{ duration: 0.25, ease: "easeOut" }}
                 />
-              </Link>
+              </button>
             ))}
           </div>
 
           {/* Actions Desktop */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-3">
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-emerald-200 text-emerald-700 text-sm font-semibold hover:bg-emerald-50 hover:border-emerald-300 transition-colors duration-300"
+            >
+              <MessageCircle className="w-4 h-4" />
+              Fale conosco
+            </a>
+
             {user ? (
               <>
                 <div className="flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 rounded-full border border-emerald-100 bg-emerald-50/60">
@@ -288,34 +313,43 @@ function Navbar() {
             className="md:hidden bg-white/98 backdrop-blur-2xl border-t border-emerald-50 overflow-hidden"
           >
             <div className="px-6 py-6 space-y-1">
-              {links.map((link, index) => (
+              {sectionLinks.map((link, index) => (
                 <motion.div
-                  key={link.name}
+                  key={link.id}
                   initial={{ opacity: 0, x: -16 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.06 }}
                 >
-                  <Link
-                    to={link.path}
-                    onClick={() => setMenuOpen(false)}
-                    className={`
-                      block px-4 py-3.5 rounded-xl text-[15px] font-medium transition-all
-                      ${
-                        location.pathname === link.path
-                          ? "bg-emerald-50 text-emerald-700"
-                          : "text-gray-600 hover:bg-gray-50"
-                      }
-                    `}
+                  <button
+                    onClick={() => handleSectionClick(link.id)}
+                    className="w-full text-left block px-4 py-3.5 rounded-xl text-[15px] font-medium text-gray-600 hover:bg-gray-50 transition-all"
                   >
                     {link.name}
-                  </Link>
+                  </button>
                 </motion.div>
               ))}
 
               <motion.div
                 initial={{ opacity: 0, x: -16 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: links.length * 0.06 }}
+                transition={{ delay: sectionLinks.length * 0.06 }}
+              >
+                <a
+                  href={WHATSAPP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMenuOpen(false)}
+                  className="flex items-center gap-2 px-4 py-3.5 rounded-xl text-[15px] font-medium text-emerald-700 hover:bg-emerald-50 transition-all"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  Fale conosco
+                </a>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: (sectionLinks.length + 1) * 0.06 }}
                 className="pt-4 mt-3 border-t border-gray-100"
               >
                 {user ? (
