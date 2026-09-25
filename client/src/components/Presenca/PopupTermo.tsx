@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  X, 
-  ChevronLeft, 
-  CheckCircle2, 
+import {
+  X,
+  ChevronLeft,
+  CheckCircle2,
   Loader2,
   Clock,
   User,
@@ -12,7 +12,8 @@ import {
   Mail,
   Calendar,
   Check,
-  DollarSign
+  DollarSign,
+  Building2,
 } from "lucide-react";
 
 // --- TYPES ---
@@ -54,18 +55,18 @@ type PopupTermoProps = {
 const slideVariants = {
   enter: (direction: number) => ({
     x: direction > 0 ? 50 : -50,
-    opacity: 0
+    opacity: 0,
   }),
   center: {
     zIndex: 1,
     x: 0,
-    opacity: 1
+    opacity: 1,
   },
   exit: (direction: number) => ({
     zIndex: 0,
     x: direction < 0 ? 50 : -50,
-    opacity: 0
-  })
+    opacity: 0,
+  }),
 };
 
 // --- MASKS ---
@@ -128,7 +129,7 @@ const Input = ({
   onChange,
   icon: Icon,
   className = "",
-  type = "text"
+  type = "text",
 }: {
   placeholder: string;
   value: string;
@@ -141,14 +142,25 @@ const Input = ({
 
   return (
     <div className={`relative mb-4 group ${className}`}>
-      <label className={`absolute left-3 transition-all duration-200 pointer-events-none 
-        ${isFocused || value ? "-top-2.5 text-xs bg-white px-1 text-indigo-600 font-medium" : "top-3 text-gray-400 text-sm"}`}>
+      <label
+        className={`absolute left-3 transition-all duration-200 pointer-events-none 
+        ${
+          isFocused || value
+            ? "-top-2.5 text-xs bg-white px-1 text-emerald-700 font-semibold"
+            : "top-3 text-gray-400 text-sm"
+        }`}
+      >
         {placeholder}
       </label>
-      
-      <div className={`flex items-center border rounded-xl bg-white transition-all duration-200 
-        ${isFocused ? "border-indigo-500 ring-2 ring-indigo-500/10 shadow-sm" : "border-gray-200 hover:border-gray-300"}`}>
-        
+
+      <div
+        className={`flex items-center border rounded-xl bg-white transition-all duration-200 
+        ${
+          isFocused
+            ? "border-emerald-500 ring-2 ring-emerald-500/10 shadow-sm"
+            : "border-gray-200 hover:border-gray-300"
+        }`}
+      >
         <input
           type={type}
           value={value}
@@ -157,7 +169,7 @@ const Input = ({
           onChange={(e) => onChange(e.target.value)}
           className="w-full p-3 bg-transparent outline-none text-gray-800 placeholder-transparent rounded-xl"
         />
-        
+
         {Icon && (
           <div className="pr-3 text-gray-400">
             <Icon size={18} />
@@ -168,27 +180,58 @@ const Input = ({
   );
 };
 
-const OptionButton = ({ selected, onClick, label }: any) => (
+const OptionButton = ({ selected, onClick, label, icon: Icon }: any) => (
   <button
+    type="button"
     onClick={onClick}
     className={`w-full p-4 rounded-xl border flex items-center justify-between transition-all duration-200 mb-3 group
-      ${selected 
-        ? "border-indigo-500 bg-indigo-50/50 ring-1 ring-indigo-500/20 text-indigo-700" 
-        : "border-gray-200 hover:border-indigo-300 hover:bg-gray-50 text-gray-600"
+      ${
+        selected
+          ? "border-emerald-500 bg-emerald-50/70 ring-1 ring-emerald-500/20 text-emerald-700"
+          : "border-gray-200 hover:border-emerald-300 hover:bg-gray-50 text-gray-600"
       }`}
   >
-    <span className="font-medium text-sm">{label}</span>
-    {selected && <Check size={18} className="text-indigo-600" />}
+    <span className="flex items-center gap-2.5 font-medium text-sm">
+      {Icon && (
+        <Icon
+          size={16}
+          className={selected ? "text-emerald-600" : "text-gray-400"}
+        />
+      )}
+      {label}
+    </span>
+    {selected && <Check size={18} className="text-emerald-600 shrink-0" />}
   </button>
 );
 
-const HeaderPopup = ({ back, title, subtitle }: { back: () => void, title: string, subtitle: string }) => (
-  <div className="flex justify-between items-center mb-6 px-1">
+const SectionLabel = ({ children }: { children: React.ReactNode }) => (
+  <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 block ml-1">
+    {children}
+  </label>
+);
+
+const HeaderPopup = ({
+  back,
+  title,
+  subtitle,
+}: {
+  back: () => void;
+  title: string;
+  subtitle: string;
+}) => (
+  <div className="relative flex justify-between items-center mb-6 px-1">
     <div>
-      <h3 className="text-xl font-bold text-slate-900 tracking-tight">{title}</h3>
-      <p className="text-xs text-slate-500 font-medium mt-0.5">{subtitle}</p>
+      <h3 className="text-xl font-bold text-slate-900 tracking-tight">
+        {title}
+      </h3>
+      <p className="text-xs font-semibold text-emerald-700 mt-0.5">
+        {subtitle}
+      </p>
     </div>
-    <button onClick={back} className="p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors">
+    <button
+      onClick={back}
+      className="p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors"
+    >
       <X size={20} />
     </button>
   </div>
@@ -200,21 +243,29 @@ const ProgressBar = ({ value }: { value: number }) => (
       initial={{ width: 0 }}
       animate={{ width: `${value}%` }}
       transition={{ duration: 0.5, ease: "circOut" }}
-      className="h-full rounded-full bg-indigo-600 shadow-[0_0_10px_rgba(79,70,229,0.4)]"
+      className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 shadow-[0_0_10px_rgba(16,185,129,0.4)]"
     />
   </div>
 );
 
-const FooterPopup = ({ step, total, back, next, finalizar, loading, erro }: any) => (
+const FooterPopup = ({
+  step,
+  total,
+  back,
+  next,
+  finalizar,
+  loading,
+  erro,
+}: any) => (
   <div className="mt-6">
     {erro && (
-        <motion.div 
-            initial={{ opacity: 0, y: -10 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            className="mb-4 p-3 rounded-lg bg-red-50 border border-red-100 text-red-600 text-xs font-medium text-center"
-        >
-            {erro}
-        </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-4 p-3 rounded-lg bg-red-50 border border-red-100 text-red-600 text-xs font-medium text-center"
+      >
+        {erro}
+      </motion.div>
     )}
 
     <div className="flex gap-3 pt-4 border-t border-gray-100">
@@ -223,41 +274,51 @@ const FooterPopup = ({ step, total, back, next, finalizar, loading, erro }: any)
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={back}
-          className="flex-1 py-3.5 rounded-xl text-slate-600 font-semibold text-sm hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all flex items-center justify-center gap-2"
+          className="flex-1 py-3.5 rounded-full text-slate-600 font-semibold text-sm hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all flex items-center justify-center gap-2"
         >
           <ChevronLeft size={16} /> Voltar
         </motion.button>
       ) : (
-        <div className="flex-1"></div>
+        <div className="flex-1" />
       )}
 
       {step < total ? (
         <motion.button
-          whileHover={{ scale: 1.02, boxShadow: "0 4px 12px rgba(79, 70, 229, 0.3)" }}
+          whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={next}
-          className="flex-[2] bg-indigo-600 hover:bg-indigo-700 text-white py-3.5 rounded-xl font-semibold text-sm shadow-lg shadow-indigo-200 transition-all flex items-center justify-center"
+          className="group relative flex-[2] overflow-hidden bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-3.5 rounded-full font-semibold text-sm shadow-[0_10px_24px_-8px_rgba(5,150,105,0.5)] transition-all flex items-center justify-center"
         >
-          Continuar
+          <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/25 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 pointer-events-none" />
+          <span className="relative z-10">Continuar</span>
         </motion.button>
       ) : (
         <motion.button
-          whileHover={{ scale: 1.02, boxShadow: "0 4px 12px rgba(22, 163, 74, 0.3)" }}
+          whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={finalizar}
           disabled={loading}
-          className={`flex-[2] py-3.5 rounded-xl font-semibold text-sm shadow-lg text-white transition-all flex items-center justify-center gap-2
-            ${loading ? "bg-green-700 cursor-not-allowed" : "bg-green-600 hover:bg-green-700 shadow-green-200"}`}
+          className={`group relative flex-[2] overflow-hidden py-3.5 rounded-full font-semibold text-sm text-white transition-all flex items-center justify-center gap-2
+            ${
+              loading
+                ? "bg-emerald-700 cursor-not-allowed"
+                : "bg-gradient-to-r from-emerald-600 to-teal-600 shadow-[0_10px_24px_-8px_rgba(5,150,105,0.5)]"
+            }`}
         >
-          {loading ? (
-            <>
-              <Loader2 size={18} className="animate-spin" /> Processando...
-            </>
-          ) : (
-            <>
-              <CheckCircle2 size={18} /> Enviar Solicitação
-            </>
+          {!loading && (
+            <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/25 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 pointer-events-none" />
           )}
+          <span className="relative z-10 flex items-center gap-2">
+            {loading ? (
+              <>
+                <Loader2 size={18} className="animate-spin" /> Processando...
+              </>
+            ) : (
+              <>
+                <CheckCircle2 size={18} /> Enviar Solicitação
+              </>
+            )}
+          </span>
         </motion.button>
       )}
     </div>
@@ -292,76 +353,95 @@ export default function PopupTermo(props: PopupTermoProps) {
   } = props;
 
   const [step, setStep] = useState(1);
-  const totalSteps = 8; // Ajustado (removido histórico de empréstimo)
+  const totalSteps = 2; // Informações Profissionais + Informações Pessoais
   const [erro, setErro] = useState("");
 
   useEffect(() => {
     if (show) document.body.style.overflow = "hidden";
     else document.body.style.overflow = "auto";
-    return () => { document.body.style.overflow = "auto"; };
+    return () => {
+      document.body.style.overflow = "auto";
+    };
   }, [show]);
 
+  // Reseta a etapa sempre que o popup é reaberto
+  useEffect(() => {
+    if (show) {
+      setStep(1);
+      setErro("");
+    }
+  }, [show]);
+
+  // ------------------------------ TEMPO DE EMPRESA (simplificado) ------------------------------
+  // Em vez de pedir anos e meses separadamente, oferecemos duas faixas diretas.
+  // Isso continua sendo guardado nos mesmos campos (anosContrato / mesesContrato)
+  // para manter compatibilidade com o restante do fluxo.
+  type TempoEmpresa = "6m" | "1a" | null;
+
+  const tempoSelecionado: TempoEmpresa =
+    anosContrato === "1" && mesesContrato === "0"
+      ? "1a"
+      : anosContrato === "0" && mesesContrato === "6"
+      ? "6m"
+      : null;
+
+  const selecionarTempoEmpresa = (opcao: "6m" | "1a") => {
+    if (opcao === "6m") {
+      setAnosContrato("0");
+      setMesesContrato("6");
+    } else {
+      setAnosContrato("1");
+      setMesesContrato("0");
+    }
+  };
+
   const validarStep = () => {
-    // Passo 1: Tempo de Empresa
+    // ETAPA 1: Informações Profissionais
     if (step === 1) {
-      const anos = parseInt(anosContrato) || 0;
-      const meses = parseInt(mesesContrato) || 0;
-      if (anos === 0 && meses === 0) {
-        setErro("Informe o tempo de contrato.");
+      if (!tempoSelecionado) {
+        setErro("Selecione há quanto tempo você trabalha na empresa.");
         return false;
       }
-      if (meses > 11) {
-        setErro("Meses devem estar entre 0 e 11.");
+
+      if (!tamanhoEmpresa) {
+        setErro("Selecione o número de funcionários da empresa.");
+        return false;
+      }
+
+      const valorNumerico = Number(salarioBruto.replace(/\D/g, ""));
+      if (!salarioBruto || valorNumerico === 0) {
+        setErro("Informe o seu salário bruto mensal.");
         return false;
       }
     }
 
-    // Passo 2: Salário Bruto
+    // ETAPA 2: Informações Pessoais
     if (step === 2) {
-        const valorNumerico = Number(salarioBruto.replace(/\D/g, ""));
-        if (!salarioBruto || valorNumerico === 0) {
-            setErro("Informe o seu salário bruto mensal.");
-            return false;
-        }
-    }
+      if (nomePres.trim().length < 3) {
+        setErro("Digite seu nome completo.");
+        return false;
+      }
 
-    // Passo 3: Tamanho Empresa
-    if (step === 3 && !tamanhoEmpresa) {
-      setErro("Selecione o tamanho da empresa.");
-      return false;
-    }
+      if (cpfPres.replace(/\D/g, "").length !== 11) {
+        setErro("CPF inválido.");
+        return false;
+      }
 
-    // Passo 4: Nome
-    if (step === 4 && nomePres.trim().length < 3) {
-      setErro("Digite seu nome completo.");
-      return false;
-    }
+      if (telefonePres.replace(/\D/g, "").length < 10) {
+        setErro("Telefone inválido.");
+        return false;
+      }
 
-    // Passo 5: CPF
-    if (step === 5 && cpfPres.replace(/\D/g, "").length !== 11) {
-      setErro("CPF inválido.");
-      return false;
-    }
-
-    // Passo 6: Telefone
-    if (step === 6 && telefonePres.replace(/\D/g, "").length < 10) {
-      setErro("Telefone inválido.");
-      return false;
-    }
-
-    // Passo 7: E-mail
-    if (step === 7) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(emailPres)) {
         setErro("E-mail inválido.");
         return false;
       }
-    }
 
-    // Passo 8: Data Nascimento
-    if (step === 8 && !validarDataNasc(dataNascPres)) {
-      setErro("Data de nascimento inválida.");
-      return false;
+      if (!validarDataNasc(dataNascPres)) {
+        setErro("Data de nascimento inválida.");
+        return false;
+      }
     }
 
     setErro("");
@@ -375,12 +455,12 @@ export default function PopupTermo(props: PopupTermoProps) {
 
   const handleBack = () => {
     if (step > 1) {
-        setStep(step - 1);
-        setErro("");
+      setStep(step - 1);
+      setErro("");
     } else {
-        onClose();
+      onClose();
     }
-  }
+  };
 
   const handleEnviar = () => {
     if (!validarStep()) return;
@@ -398,10 +478,8 @@ export default function PopupTermo(props: PopupTermoProps) {
     });
   };
 
-  const getStepTitle = () => {
-    if (step <= 3) return "Perfil Profissional";
-    return "Dados Pessoais";
-  };
+  const getStepTitle = () =>
+    step === 1 ? "Informações Profissionais" : "Informações Pessoais";
 
   return (
     <AnimatePresence>
@@ -417,128 +495,132 @@ export default function PopupTermo(props: PopupTermoProps) {
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 20 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-8 relative overflow-hidden"
+            className="bg-white rounded-[2rem] shadow-2xl w-full max-w-lg relative overflow-hidden max-h-[90vh] flex flex-col"
           >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-bl-full -z-0 opacity-50" />
+            {/* Fio de acabamento — mesma linguagem visual da navbar / card */}
+            <div className="h-[3px] w-full bg-gradient-to-r from-emerald-400 via-teal-500 to-emerald-400 shrink-0" />
 
-            <div className="relative z-10">
-              <HeaderPopup 
-                back={onClose} 
-                title={getStepTitle()} 
+            {/* Glow decorativo sutil */}
+            <div className="absolute top-0 right-0 w-40 h-40 bg-emerald-400/10 rounded-full blur-3xl -z-0 pointer-events-none" />
+
+            <div className="relative z-10 p-8 overflow-y-auto">
+              <HeaderPopup
+                back={onClose}
+                title={getStepTitle()}
                 subtitle={`Passo ${step} de ${totalSteps}`}
               />
-              
+
               <ProgressBar value={(step / totalSteps) * 100} />
 
-              <div className="mt-2 min-h-[200px]">
+              <div className="mt-2 min-h-[280px]">
                 <AnimatePresence mode="wait">
-                  
-                  {/* STEP 1: Tempo Contrato */}
+                  {/* ETAPA 1: INFORMAÇÕES PROFISSIONAIS */}
                   {step === 1 && (
-                    <motion.div key="s1" variants={slideVariants} initial="enter" animate="center" exit="exit">
-                      <div className="grid grid-cols-2 gap-4">
-                        <Input
-                          placeholder="Anos"
-                          value={anosContrato}
-                          onChange={(v) => setAnosContrato(v.replace(/\D/g, ""))}
-                          icon={Clock}
-                          type="number"
+                    <motion.div
+                      key="s1"
+                      variants={slideVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                    >
+                      <SectionLabel>
+                        Há quanto tempo você trabalha na empresa atual?
+                      </SectionLabel>
+                      <OptionButton
+                        icon={Clock}
+                        selected={tempoSelecionado === "6m"}
+                        onClick={() => selecionarTempoEmpresa("6m")}
+                        label="Mais de 6 meses"
+                      />
+                      <OptionButton
+                        icon={Clock}
+                        selected={tempoSelecionado === "1a"}
+                        onClick={() => selecionarTempoEmpresa("1a")}
+                        label="Mais de 1 ano"
+                      />
+
+                      <div className="mt-6">
+                        <SectionLabel>
+                          Quantos funcionários tem a empresa?
+                        </SectionLabel>
+                        <OptionButton
+                          icon={Building2}
+                          selected={
+                            tamanhoEmpresa === "Menos de 20 funcionários"
+                          }
+                          onClick={() =>
+                            setTamanhoEmpresa("Menos de 20 funcionários")
+                          }
+                          label="Menos de 20 funcionários"
                         />
-                        <Input
-                          placeholder="Meses"
-                          value={mesesContrato}
-                          onChange={(v) => {
-                            const val = v.replace(/\D/g, "");
-                            if (parseInt(val) > 11) return;
-                            setMesesContrato(val);
-                          }}
-                          icon={Clock}
-                          type="number"
+                        <OptionButton
+                          icon={Building2}
+                          selected={
+                            tamanhoEmpresa === "Mais de 20 funcionários"
+                          }
+                          onClick={() =>
+                            setTamanhoEmpresa("Mais de 20 funcionários")
+                          }
+                          label="20 ou mais funcionários"
+                        />
+                        <OptionButton
+                          icon={Building2}
+                          selected={
+                            tamanhoEmpresa === "100 ou mais funcionários"
+                          }
+                          onClick={() =>
+                            setTamanhoEmpresa("100 ou mais funcionários")
+                          }
+                          label="100 ou mais funcionários"
                         />
                       </div>
-                      <p className="text-xs text-gray-400 text-center mt-[-10px]">Tempo de serviço na empresa atual</p>
-                    </motion.div>
-                  )}
 
-                  {/* STEP 2: Salário Bruto */}
-                  {step === 2 && (
-                    <motion.div key="s2" variants={slideVariants} initial="enter" animate="center" exit="exit">
-                       <label className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 block ml-1">
-                         Renda Mensal
-                       </label>
-                       <Input
+                      <div className="mt-6">
+                        <SectionLabel>Renda mensal bruta</SectionLabel>
+                        <Input
                           placeholder="Salário Bruto"
                           value={salarioBruto}
                           onChange={(v) => setSalarioBruto(maskCurrency(v))}
                           icon={DollarSign}
                         />
-                        <p className="text-xs text-gray-400 px-1">Valor total recebido sem descontos (holerite).</p>
+                        <p className="text-xs text-gray-400 px-1 -mt-2">
+                          Valor total recebido sem descontos (holerite).
+                        </p>
+                      </div>
                     </motion.div>
                   )}
 
-                  {/* STEP 3: Tamanho Empresa */}
-                  {step === 3 && (
-                    <motion.div key="s3" variants={slideVariants} initial="enter" animate="center" exit="exit">
-                       <label className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 block ml-1">
-                         Porte da Empresa
-                       </label>
-                      <OptionButton
-                        selected={tamanhoEmpresa === "Menos de 20 funcionários"}
-                        onClick={() => setTamanhoEmpresa("Menos de 20 funcionários")}
-                        label="Menos de 20 funcionários"
-                      />
-                      <OptionButton
-                        selected={tamanhoEmpresa === "Mais de 20 funcionários"}
-                        onClick={() => setTamanhoEmpresa("Mais de 20 funcionários")}
-                        label="20 ou mais funcionários"
-                      />
-                      <OptionButton
-                        selected={tamanhoEmpresa === "100 ou mais funcionários"}
-                        onClick={() => setTamanhoEmpresa("100 ou mais funcionários")}
-                        label="100 ou mais funcionários"
-                      />
-                    </motion.div>
-                  )}
-
-                  {/* STEP 4: Nome */}
-                  {step === 4 && (
-                    <motion.div key="s4" variants={slideVariants} initial="enter" animate="center" exit="exit">
+                  {/* ETAPA 2: INFORMAÇÕES PESSOAIS */}
+                  {step === 2 && (
+                    <motion.div
+                      key="s2"
+                      variants={slideVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                    >
                       <Input
                         placeholder="Nome Completo"
                         value={nomePres}
                         onChange={(v) => setNomePres(maskNome(v))}
                         icon={User}
                       />
-                    </motion.div>
-                  )}
 
-                  {/* STEP 5: CPF */}
-                  {step === 5 && (
-                    <motion.div key="s5" variants={slideVariants} initial="enter" animate="center" exit="exit">
-                      <Input
-                        placeholder="CPF"
-                        value={maskCPF(cpfPres)}
-                        onChange={(v) => setCpfPres(maskCPF(v))}
-                        icon={FileText}
-                      />
-                    </motion.div>
-                  )}
+                      <div className="grid grid-cols-2 gap-4">
+                        <Input
+                          placeholder="CPF"
+                          value={maskCPF(cpfPres)}
+                          onChange={(v) => setCpfPres(maskCPF(v))}
+                          icon={FileText}
+                        />
+                        <Input
+                          placeholder="Celular"
+                          value={maskPhone(telefonePres)}
+                          onChange={(v) => setTelefonePres(maskPhone(v))}
+                          icon={Phone}
+                        />
+                      </div>
 
-                  {/* STEP 6: Telefone */}
-                  {step === 6 && (
-                    <motion.div key="s6" variants={slideVariants} initial="enter" animate="center" exit="exit">
-                      <Input
-                        placeholder="Celular"
-                        value={maskPhone(telefonePres)}
-                        onChange={(v) => setTelefonePres(maskPhone(v))}
-                        icon={Phone}
-                      />
-                    </motion.div>
-                  )}
-
-                  {/* STEP 7: Email */}
-                  {step === 7 && (
-                    <motion.div key="s7" variants={slideVariants} initial="enter" animate="center" exit="exit">
                       <Input
                         placeholder="E-mail"
                         value={emailPres}
@@ -546,12 +628,7 @@ export default function PopupTermo(props: PopupTermoProps) {
                         icon={Mail}
                         type="email"
                       />
-                    </motion.div>
-                  )}
 
-                  {/* STEP 8: Data Nasc */}
-                  {step === 8 && (
-                    <motion.div key="s8" variants={slideVariants} initial="enter" animate="center" exit="exit">
                       <Input
                         placeholder="Data de Nascimento"
                         value={maskDate(dataNascPres)}
@@ -560,7 +637,6 @@ export default function PopupTermo(props: PopupTermoProps) {
                       />
                     </motion.div>
                   )}
-
                 </AnimatePresence>
               </div>
 
