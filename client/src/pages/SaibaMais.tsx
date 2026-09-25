@@ -192,7 +192,7 @@ const SaibaMais: React.FC = () => {
               transition={{ delay: 0.6 }}
               className="flex flex-col sm:flex-row gap-4 justify-center"
             >
-              
+              <a
                 href="/"
                 className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold py-4 px-8 rounded-full shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
               >
