@@ -131,7 +131,7 @@ function Navbar() {
             <motion.img
               src={logo}
               alt="Kant Digital"
-              className="h-10 md:h-12 w-auto object-contain"
+              className="h-14 md:h-16 w-auto object-contain"
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.2 }}
             />
