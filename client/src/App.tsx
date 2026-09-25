@@ -40,14 +40,22 @@ function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Detectar scroll para efeito glassmorphism
+  // Detectar scroll para efeito glassmorphism + navbar compacta
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 24);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Travar o scroll do body quando o menu mobile está aberto
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
 
   // 🔒 Esconder navbar em rotas admin e captura
   if (
@@ -61,7 +69,7 @@ function Navbar() {
 
   const links = [
     { name: "Cidades", path: "/sobre" },
-    { name: "Como Funciona", path: "/produto-consignado-clt" },
+    { name: "Como funciona", path: "/produto-consignado-clt" },
     { name: "Depoimentos", path: "/ajuda" },
   ];
 
@@ -116,29 +124,41 @@ function Navbar() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={`
-        fixed top-0 left-0 w-full z-50 transition-all duration-500
+        fixed top-0 left-0 w-full z-50 transition-colors duration-500
         ${
           scrolled
-            ? "bg-white/80 backdrop-blur-2xl border-b border-emerald-100/50 shadow-sm"
-            : "bg-white border-b border-transparent"
+            ? "bg-white/75 backdrop-blur-xl shadow-[0_1px_0_0_rgba(16,185,129,0.12)]"
+            : "bg-white/95"
         }
       `}
     >
+      {/* Fio de acabamento no rodapé da navbar — substitui a borda genérica */}
+      <div
+        className={`absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent transition-opacity duration-500 ${
+          scrolled ? "opacity-100" : "opacity-0"
+        }`}
+      />
+
       <div className="max-w-7xl mx-auto px-6 md:px-8">
-        <div className="flex justify-between items-center h-20">
+        <div
+          className={`flex justify-between items-center transition-all duration-500 ${
+            scrolled ? "h-16" : "h-24"
+          }`}
+        >
           {/* Logo */}
-          <Link to="/" className="relative group">
+          <Link to="/" className="relative shrink-0">
             <motion.img
               src={logo}
               alt="Kant Digital"
-              className="h-14 md:h-16 w-auto object-contain"
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.2 }}
+              className="w-auto object-contain"
+              animate={{ height: scrolled ? 40 : 56 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              whileHover={{ scale: 1.04 }}
             />
           </Link>
 
           {/* Links Desktop */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-2">
             {links.map((link) => (
               <Link
                 key={link.name}
@@ -147,81 +167,77 @@ function Navbar() {
               >
                 <span
                   className={`
-                    text-sm font-semibold transition-colors duration-300
+                    text-[15px] font-medium transition-colors duration-300
                     ${
                       location.pathname === link.path
                         ? "text-emerald-700"
-                        : "text-gray-700 group-hover:text-emerald-600"
+                        : "text-gray-600 group-hover:text-emerald-700"
                     }
                   `}
                 >
                   {link.name}
                 </span>
 
-                {/* Indicador animado */}
-                <motion.div
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full"
-                  initial={{ scaleX: 0 }}
+                {/* Indicador — cresce a partir do centro */}
+                <motion.span
+                  className="absolute left-1/2 bottom-0 h-[2px] bg-emerald-600 rounded-full"
+                  style={{ translateX: "-50%" }}
+                  initial={false}
                   animate={{
-                    scaleX: location.pathname === link.path ? 1 : 0,
+                    width: location.pathname === link.path ? "60%" : "0%",
                   }}
-                  whileHover={{ scaleX: 1 }}
-                  transition={{ duration: 0.3 }}
+                  whileHover={{ width: "60%" }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
                 />
               </Link>
             ))}
           </div>
 
           {/* Actions Desktop */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-4">
             {user ? (
               <>
-                <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-emerald-50/50">
+                <div className="flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 rounded-full border border-emerald-100 bg-emerald-50/60">
                   {user.foto ? (
                     <img
                       src={user.foto}
                       alt="Foto"
-                      className="w-8 h-8 rounded-full border-2 border-emerald-500"
+                      className="w-8 h-8 rounded-full ring-2 ring-white"
                     />
                   ) : (
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white text-sm font-bold">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-sm font-semibold">
                       {user.nome[0]?.toUpperCase()}
                     </div>
                   )}
-                  <span className="text-sm font-semibold text-gray-700">
+                  <span className="text-sm font-medium text-gray-700">
                     {user.nome.split(" ")[0]}
                   </span>
                 </div>
 
-                <motion.button
+                <button
                   onClick={() => {
                     logout();
                     navigate("/");
                   }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-4 py-2 text-sm font-semibold text-gray-700 hover:text-emerald-700 transition-colors"
+                  className="text-sm font-medium text-gray-500 hover:text-emerald-700 transition-colors"
                 >
                   Sair
-                </motion.button>
+                </button>
               </>
             ) : (
               <motion.button
                 onClick={handleGoogleLogin}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="group relative px-6 py-2.5 rounded-full overflow-hidden"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="group relative px-6 py-2.5 rounded-full overflow-hidden shadow-[0_8px_24px_-8px_rgba(5,150,105,0.55)]"
               >
-                {/* Background gradient animado */}
-                <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 transition-transform group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600" />
+                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/25 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
 
-                {/* Brilho hover */}
-                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-
-                <span className="relative flex items-center gap-2 text-sm font-bold text-white">
+                <span className="relative flex items-center gap-2 text-sm font-semibold text-white">
                   <img src={googleLogo} alt="Google" className="w-4 h-4" />
                   Começar
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
                 </span>
               </motion.button>
             )}
@@ -229,9 +245,10 @@ function Navbar() {
 
           {/* Hamburger Mobile */}
           <motion.button
-            className="md:hidden p-2"
+            className="md:hidden p-2 -mr-2 rounded-full"
             onClick={() => setMenuOpen(!menuOpen)}
             whileTap={{ scale: 0.9 }}
+            aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
           >
             <AnimatePresence mode="wait">
               {menuOpen ? (
@@ -267,26 +284,26 @@ function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden bg-white/95 backdrop-blur-2xl border-t border-emerald-100"
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="md:hidden bg-white/98 backdrop-blur-2xl border-t border-emerald-50 overflow-hidden"
           >
-            <div className="px-6 py-6 space-y-4">
+            <div className="px-6 py-6 space-y-1">
               {links.map((link, index) => (
                 <motion.div
                   key={link.name}
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: -16 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: index * 0.06 }}
                 >
                   <Link
                     to={link.path}
                     onClick={() => setMenuOpen(false)}
                     className={`
-                      block px-4 py-3 rounded-xl font-semibold transition-all
+                      block px-4 py-3.5 rounded-xl text-[15px] font-medium transition-all
                       ${
                         location.pathname === link.path
                           ? "bg-emerald-50 text-emerald-700"
-                          : "text-gray-700 hover:bg-gray-50"
+                          : "text-gray-600 hover:bg-gray-50"
                       }
                     `}
                   >
@@ -296,30 +313,30 @@ function Navbar() {
               ))}
 
               <motion.div
-                initial={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, x: -16 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: links.length * 0.1 }}
-                className="pt-4 border-t border-gray-100"
+                transition={{ delay: links.length * 0.06 }}
+                className="pt-4 mt-3 border-t border-gray-100"
               >
                 {user ? (
                   <div className="space-y-3">
-                    <div className="flex items-center gap-3 px-4 py-3 bg-emerald-50 rounded-xl">
+                    <div className="flex items-center gap-3 px-4 py-3 bg-emerald-50/60 rounded-xl">
                       {user.foto ? (
                         <img
                           src={user.foto}
                           alt="Foto"
-                          className="w-10 h-10 rounded-full border-2 border-emerald-500"
+                          className="w-10 h-10 rounded-full ring-2 ring-white"
                         />
                       ) : (
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white font-bold">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-semibold">
                           {user.nome[0]?.toUpperCase()}
                         </div>
                       )}
                       <div>
-                        <div className="text-sm font-bold text-gray-900">
+                        <div className="text-sm font-semibold text-gray-900">
                           {user.nome.split(" ")[0]}
                         </div>
-                        <div className="text-xs text-gray-600">
+                        <div className="text-xs text-gray-500">
                           {user.email}
                         </div>
                       </div>
@@ -331,7 +348,7 @@ function Navbar() {
                         setMenuOpen(false);
                         navigate("/");
                       }}
-                      className="w-full px-4 py-3 text-center font-semibold text-gray-700 hover:bg-gray-50 rounded-xl transition-colors"
+                      className="w-full px-4 py-3 text-center font-medium text-gray-600 hover:bg-gray-50 rounded-xl transition-colors"
                     >
                       Sair
                     </button>
@@ -342,10 +359,10 @@ function Navbar() {
                       setMenuOpen(false);
                       handleGoogleLogin();
                     }}
-                    className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold py-3 px-6 rounded-xl flex items-center justify-center gap-2 hover:shadow-lg transition-shadow"
+                    className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 shadow-[0_8px_24px_-8px_rgba(5,150,105,0.55)]"
                   >
                     <img src={googleLogo} alt="Google" className="w-5 h-5" />
-                    Começar Agora
+                    Começar agora
                   </button>
                 )}
               </motion.div>
@@ -372,7 +389,7 @@ function AppContent() {
   return (
     <>
       <Navbar />
-      <div className={isAdmin || isCaptura ? "" : "pt-20 bg-white min-h-screen"}>
+      <div className={isAdmin || isCaptura ? "" : "pt-24 bg-white min-h-screen"}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/sobre" element={<Sobre />} />
