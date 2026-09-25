@@ -92,9 +92,17 @@ function Navbar() {
 
   // Navega até a seção — se já estiver na Home, só rola; se não, vai pra Home e rola em seguida
   const handleSectionClick = (id: string) => {
+    const isHome = location.pathname === "/";
+
     setMenuOpen(false);
-    if (location.pathname === "/") {
-      scrollToId(id);
+    // Libera o scroll do body na hora — sem isso, o menu mobile ainda está
+    // travando o scroll no instante em que tentaríamos rolar até a seção.
+    document.body.style.overflow = "";
+
+    if (isHome) {
+      // Espera a animação de fechamento do menu mobile terminar antes de rolar,
+      // senão o cálculo de posição da seção acontece com o layout ainda mudando.
+      setTimeout(() => scrollToId(id), 300);
     } else {
       navigate("/", { state: { scrollTo: id } });
     }
