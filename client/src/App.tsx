@@ -159,12 +159,8 @@ function Navbar() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={`
-        fixed top-0 left-0 w-full z-50 transition-colors duration-500
-        ${
-          scrolled
-            ? "bg-white/75 backdrop-blur-xl shadow-[0_1px_0_0_rgba(16,185,129,0.12)]"
-            : "bg-white/95"
-        }
+        fixed top-0 left-0 w-full z-50 bg-white transition-shadow duration-500
+        ${scrolled ? "shadow-[0_1px_0_0_rgba(16,185,129,0.12)]" : ""}
       `}
     >
       {/* Fio de acabamento no rodapé da navbar — substitui a borda genérica */}
@@ -318,7 +314,7 @@ function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="md:hidden bg-white/98 backdrop-blur-2xl border-t border-emerald-50 overflow-hidden"
+            className="md:hidden bg-white border-t border-emerald-50 overflow-hidden"
           >
             <div className="px-6 py-6 space-y-1">
               {sectionLinks.map((link, index) => (
