@@ -264,7 +264,6 @@ function Navbar() {
                 <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/25 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
 
                 <span className="relative flex items-center gap-2 text-sm font-semibold text-white">
-                  <img src={googleLogo} alt="Google" className="w-4 h-4" />
                   Começar
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
                 </span>
