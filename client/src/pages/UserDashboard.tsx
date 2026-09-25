@@ -1,5 +1,6 @@
 // src/pages/UserDashboard.tsx
 import React, { useState } from "react";
+import { ShieldCheck, Zap, Clock3 } from "lucide-react";
 
 // CARDS
 import CardOfertaPresenca from "../components/Cards/CardOfertaPresenca";
@@ -141,50 +142,100 @@ export default function UserDashboard() {
     .animate-fade-in-up {
       animation: fadeInUp 0.6s ease-out forwards;
     }
+
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0) translateX(0); }
+      50% { transform: translateY(-14px) translateX(8px); }
+    }
+    .animate-float-slow {
+      animation: floatSlow 9s ease-in-out infinite;
+    }
+    .animate-float-slow-delayed {
+      animation: floatSlow 11s ease-in-out infinite;
+      animation-delay: 1.5s;
+    }
   `;
+
+  // ------------------------------ TRUST BADGES ------------------------------
+  const trustItems = [
+    { icon: ShieldCheck, label: "100% seguro e digital" },
+    { icon: Zap, label: "Liberação em até 24h úteis" },
+    { icon: Clock3, label: "Simulação em poucos minutos" },
+  ];
 
   // ------------------------------ RENDER ------------------------------
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 pb-20 px-0 flex flex-col items-center relative font-sans text-slate-800">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 pb-24 px-0 flex flex-col items-center relative font-sans text-slate-800 overflow-x-hidden">
       <style>{customStyles}</style>
 
-      {/* --- BANNER HERO COM OVERLAY MODERNO --- */}
-      <div className="relative w-full h-[220px] md:h-[280px] overflow-hidden shadow-md z-0">
+      {/* --- BANNER HERO COM IDENTIDADE NAVY + EMERALD --- */}
+      <div className="relative w-full h-[240px] md:h-[300px] overflow-hidden shadow-md z-0">
         <img
           src={bannerPropostas}
           alt="Banner"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0A2540]/90 via-[#0A2540]/40 to-transparent pointer-events-none" />
 
-        <div className="absolute inset-0 flex flex-col justify-center items-center z-10 px-4 mt-6">
+        {/* Overlay navy institucional, alinhado ao theme-color do site (#0b1c3a) */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0A2540] via-[#0A2540]/70 to-[#0A2540]/20 pointer-events-none" />
+
+        {/* Blobs decorativos sutis, em emerald/teal — mesma paleta dos CTAs */}
+        <div className="absolute -left-10 top-6 w-52 h-52 rounded-full bg-emerald-400/20 blur-3xl pointer-events-none animate-float-slow" />
+        <div className="absolute right-0 bottom-0 w-64 h-64 rounded-full bg-teal-400/15 blur-3xl pointer-events-none animate-float-slow-delayed" />
+
+        <div className="absolute inset-0 flex flex-col justify-center items-center z-10 px-4">
+          {/* Badge de confiança */}
+          <span className="animate-fade-in-up inline-flex items-center gap-1.5 mb-4 px-4 py-1.5 rounded-full text-[11px] font-semibold uppercase tracking-wider text-emerald-50 bg-white/10 border border-white/20 backdrop-blur-sm">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-300" />
+            Crédito do Trabalhador
+          </span>
+
           <h1 className="text-white text-3xl md:text-5xl font-extrabold tracking-tight text-center drop-shadow-lg animate-fade-in-up">
             Simule e Contrate
           </h1>
-          <p className="text-white/90 text-sm md:text-lg mt-2 text-center max-w-xl animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-            Solicite seu Crédito do Trabalhador de forma rápida e segura.
+          <p
+            className="text-white/80 text-sm md:text-lg mt-3 text-center max-w-xl animate-fade-in-up"
+            style={{ animationDelay: "0.1s" }}
+          >
+            Solicite seu Crédito CLT de forma rápida, segura e 100% digital.
           </p>
         </div>
       </div>
 
       {/* --- CONTEÚDO PRINCIPAL --- */}
-      <div className="w-full max-w-7xl relative z-20 -mt-16 px-4 md:px-6 flex justify-center animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+      <div
+        className="w-full max-w-7xl relative z-20 -mt-16 px-4 md:px-6 flex flex-col items-center animate-fade-in-up"
+        style={{ animationDelay: "0.2s" }}
+      >
         <div className="w-full sm:w-[380px]">
-          <div className="rounded-2xl shadow-lg hover:shadow-2xl bg-white overflow-hidden border border-slate-100 transition-transform duration-300 hover:scale-[1.02] hover:-translate-y-1">
-            <CardOfertaPresenca
-              banco={{
-                id: "presenca_clt",
-                nome: "Crédito CLT",
-                tipo: "Crédito do Trabalhador",
-                logo: presencaLogo,
-              }}
-              isManualBank={false}
-              etapa={0}
-              abrirPopupSimulacao={abrirPopupPresencaCLT}
-              linkTermo={undefined}
-              onAutorizar={undefined}
-            />
-          </div>
+          <CardOfertaPresenca
+            banco={{
+              id: "presenca_clt",
+              nome: "Crédito CLT",
+              tipo: "Crédito do Trabalhador",
+              logo: presencaLogo,
+            }}
+            isManualBank={false}
+            etapa={0}
+            abrirPopupSimulacao={abrirPopupPresencaCLT}
+            linkTermo={undefined}
+            onAutorizar={undefined}
+          />
+        </div>
+
+        {/* --- FAIXA DE CONFIANÇA --- */}
+        <div className="mt-10 mb-2 flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
+          {trustItems.map(({ icon: Icon, label }) => (
+            <div
+              key={label}
+              className="flex items-center gap-2 text-slate-500 text-xs sm:text-sm font-medium"
+            >
+              <span className="w-8 h-8 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center shrink-0">
+                <Icon className="w-4 h-4 text-emerald-600" />
+              </span>
+              {label}
+            </div>
+          ))}
         </div>
       </div>
 

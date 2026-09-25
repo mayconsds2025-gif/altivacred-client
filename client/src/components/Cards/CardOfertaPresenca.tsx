@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ChevronRight, AlertCircle, RotateCcw, CheckCircle2 } from "lucide-react";
+import {
+  ChevronRight,
+  AlertCircle,
+  RotateCcw,
+  CheckCircle2,
+  Clock,
+  Zap,
+  ShieldCheck,
+} from "lucide-react";
 
 type CardOfertaProps = {
   banco: {
@@ -43,14 +51,12 @@ export default function CardOfertaPresenca({
   const [progress, setProgress] = useState(0);
   const [jaAutorizou, setJaAutorizou] = useState(false);
 
-
   const isFGTS = banco.id === "presenca_fgts";
 
   const isCarEquity =
     banco.tipo.toLowerCase().includes("veículo") ||
     banco.tipo.toLowerCase().includes("car equity");
 
-  // ✅ NOVO: Saque com Cartão de Crédito (SEM alterar tema)
   const isSaqueCartao =
     banco.id === "saque_cartao" ||
     banco.tipo.toLowerCase().includes("cartão");
@@ -88,35 +94,33 @@ export default function CardOfertaPresenca({
   }, [fgtsLoadingTrigger, banco.id]);
 
   // ----------------------------- PROGRESS BAR ------------------------------
-useEffect(() => {
-  if (!loading) {
-    setProgress(0);
-    return;
-  }
+  useEffect(() => {
+    if (!loading) {
+      setProgress(0);
+      return;
+    }
 
-  const totalDuration = 7000; // 25s alinhado com backend
-  const updateEvery = 100;     // atualiza a cada 100ms
-  const maxAutoProgress = 90;  // nunca passa de 90% sozinho
+    const totalDuration = 7000; // 25s alinhado com backend
+    const updateEvery = 100; // atualiza a cada 100ms
+    const maxAutoProgress = 90; // nunca passa de 90% sozinho
 
-  const increment =
-    (updateEvery / totalDuration) * maxAutoProgress;
+    const increment = (updateEvery / totalDuration) * maxAutoProgress;
 
-  const interval = setInterval(() => {
-    setProgress((p) => {
-      const next = p + increment;
+    const interval = setInterval(() => {
+      setProgress((p) => {
+        const next = p + increment;
 
-      if (next >= maxAutoProgress) {
-        clearInterval(interval);
-        return maxAutoProgress; // trava em 90%
-      }
+        if (next >= maxAutoProgress) {
+          clearInterval(interval);
+          return maxAutoProgress; // trava em 90%
+        }
 
-      return next;
-    });
-  }, updateEvery);
+        return next;
+      });
+    }, updateEvery);
 
-  return () => clearInterval(interval);
-}, [loading]);
-
+    return () => clearInterval(interval);
+  }, [loading]);
 
   // ----------------------------- BOTÃO ------------------------------
   const isPresenca = !isManualBank;
@@ -124,12 +128,8 @@ useEffect(() => {
   let labelBotao = "Simular Crédito";
   const isAutorizar = isPresenca && linkTermo;
 
-  if (isAutorizar && !jaAutorizou)
-  labelBotao = "Autorizar Consulta";
-
-if (isAutorizar && jaAutorizou)
-  labelBotao = "Já autorizei";
-
+  if (isAutorizar && !jaAutorizou) labelBotao = "Autorizar Consulta";
+  if (isAutorizar && jaAutorizou) labelBotao = "Já autorizei";
 
   if (isManualBank && etapa >= 1) {
     if (banco.id === "presenca_fgts") labelBotao = "Autorizar Consulta";
@@ -141,28 +141,26 @@ if (isAutorizar && jaAutorizou)
 
     if (isPresenca) {
       if (linkTermo && !jaAutorizou) {
-  window.open(linkTermo, "_blank");
-  setJaAutorizou(true);
-  return;
-}
+        window.open(linkTermo, "_blank");
+        setJaAutorizou(true);
+        return;
+      }
 
-if (linkTermo && jaAutorizou) {
-  setError(false);
-  setProgress(0);
-  setLoading(true);
+      if (linkTermo && jaAutorizou) {
+        setError(false);
+        setProgress(0);
+        setLoading(true);
 
-  try {
-    await onAutorizar?.(); // 👈 agora espera backend
-    setLoading(false);
-  } catch {
-    setLoading(false);
-    setError(true);
-  }
+        try {
+          await onAutorizar?.(); // 👈 agora espera backend
+          setLoading(false);
+        } catch {
+          setLoading(false);
+          setError(true);
+        }
 
-  return;
-}
-
-
+        return;
+      }
 
       abrirPopupSimulacao();
       return;
@@ -181,19 +179,31 @@ if (linkTermo && jaAutorizou) {
     onRetryFGTS?.();
   };
 
+  // ----------------------------- IDENTIDADE VISUAL (Kant Digital) ------------------------------
+  // Navy institucional (#0A2540) como cor de marca + gradiente emerald → teal
+  // como acento de ação, espelhando a navbar e os CTAs do site.
+  const NAVY = "#0A2540";
+  const NAVY_DARK = "#0d1f38";
+
+  const accentGradient = isCarEquity
+    ? "from-[#0A2540] to-[#16324f]"
+    : "from-emerald-600 to-teal-600";
+
+  const accentGlowShadow = isCarEquity
+    ? "shadow-[0_10px_28px_-8px_rgba(10,37,64,0.5)]"
+    : "shadow-[0_10px_28px_-8px_rgba(5,150,105,0.5)]";
+
+  const topBarGradient = isCarEquity
+    ? "from-slate-300 via-[#0A2540] to-slate-300"
+    : "from-emerald-400 via-teal-500 to-emerald-400";
+
   // ----------------------------- RENDER BOTÃO ------------------------------
   const renderBotao = () => {
     const baseClasses = `
-      w-full 
-      h-14
-      rounded-xl
-      font-bold 
-      text-sm
-      shadow-sm
-      transition-all
-      duration-200
+      relative w-full h-14 rounded-full font-bold text-sm
+      transition-all duration-200
       flex items-center justify-center gap-2
-      uppercase tracking-wide
+      uppercase tracking-wide overflow-hidden
     `;
 
     if (error) {
@@ -202,7 +212,7 @@ if (linkTermo && jaAutorizou) {
           <motion.div
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className={`${baseClasses} bg-red-50 text-red-700 border border-red-100 shadow-none cursor-default`}
+            className={`${baseClasses} bg-red-50 text-red-700 border border-red-100`}
           >
             <AlertCircle className="w-5 h-5" />
             Falha na consulta
@@ -222,88 +232,45 @@ if (linkTermo && jaAutorizou) {
     if (loading) {
       return (
         <div
-          className={`relative ${baseClasses} bg-slate-100 text-slate-500 shadow-none overflow-hidden cursor-wait`}
+          className={`relative ${baseClasses} bg-slate-100 text-slate-500 cursor-wait`}
         >
           <span className="relative z-10 uppercase text-xs font-bold tracking-widest">
             Processando...
           </span>
 
           <div
-            className={`absolute left-0 top-0 h-full opacity-20 transition-all duration-100 ease-linear ${
-              isCarEquity ? "bg-indigo-600" : "bg-blue-600"
-            }`}
+            className={`absolute left-0 top-0 h-full bg-gradient-to-r ${accentGradient} opacity-25 transition-all duration-100 ease-linear`}
             style={{ width: `${progress}%` }}
           />
         </div>
       );
     }
 
- const buttonStyle =
-  isAutorizar && !jaAutorizou
-    ? "bg-emerald-600 hover:bg-emerald-700 text-white"
-    : isAutorizar && jaAutorizou
-    ? "bg-blue-600 hover:bg-blue-700 text-white"
-    : isCarEquity
-    ? "bg-[#2E3A59] ..."
-    : "bg-blue-600 hover:bg-blue-700 text-white";
+    const buttonGradient =
+      isAutorizar && jaAutorizou
+        ? "from-[#0A2540] to-[#16324f]"
+        : accentGradient;
 
+    const buttonGlow =
+      isAutorizar && jaAutorizou
+        ? "shadow-[0_10px_28px_-8px_rgba(10,37,64,0.5)]"
+        : accentGlowShadow;
 
     return (
       <motion.button
         onClick={handleClick}
-        whileHover={{
-          scale: 1.02,
-          y: -2,
-          boxShadow: isCarEquity
-            ? "0 10px 20px rgba(46, 58, 89, 0.4)"
-            : "0 10px 20px rgba(59, 130, 246, 0.25)",
-        }}
+        whileHover={{ scale: 1.02, y: -2 }}
         whileTap={{ scale: 0.98 }}
-        className={`${baseClasses} ${buttonStyle}`}
+        className={`group ${baseClasses} bg-gradient-to-r ${buttonGradient} text-white ${buttonGlow}`}
       >
-        {labelBotao}
-        <ChevronRight className="w-5 h-5" />
+        {/* Brilho deslizante no hover — mesma assinatura do CTA da navbar */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/25 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 pointer-events-none" />
+        <span className="relative z-10 flex items-center gap-2">
+          {labelBotao}
+          <ChevronRight className="w-5 h-5" />
+        </span>
       </motion.button>
     );
-  };
-
-  // ----------------------------- TEMA (INALTERADO) ------------------------------
-  const theme = {
-    container: isCarEquity
-      ? "bg-white border-slate-100 shadow-[0_15px_40px_-5px_rgba(0,0,0,0.12)] text-slate-900"
-      : "bg-white/90 backdrop-blur-xl border-gray-100 shadow-[0_10px_40px_rgba(0,0,0,0.06)] text-slate-800",
-
-    headerBg: isCarEquity
-      ? "bg-white"
-      : "bg-gradient-to-r from-[#F8FAFC] to-white border-b border-gray-100",
-
-    headerTitle: "text-slate-900 font-extrabold",
-    headerSubtitle: isCarEquity
-      ? "text-indigo-600 font-semibold"
-      : "text-slate-500",
-
-    labelColor: "text-slate-400 font-semibold tracking-widest",
-    valueColor: isCarEquity ? "text-[#2E3A59]" : "text-[#0A2540]",
-    centsColor: "text-slate-400 font-medium",
-
-    taxaBadgeBg: isCarEquity
-      ? "bg-slate-50 border border-slate-200/60"
-      : "bg-slate-50 border border-slate-100",
-    taxaValueColor: isCarEquity
-      ? "text-indigo-700 font-black"
-      : "text-emerald-600 font-bold",
-
-    bannerBg: isCarEquity
-      ? "bg-gradient-to-r from-slate-100 via-white to-slate-100 border-y border-slate-200/50"
-      : "bg-[#0A2540]",
-    bannerTextColor: isCarEquity ? "text-slate-700" : "text-white",
-
-    separatorColor: "border-slate-100",
-    conditionLabel: "text-slate-500",
-    conditionValue: isCarEquity
-      ? "text-slate-900 font-bold"
-      : "text-slate-700 font-bold",
-    footerBg: "bg-white",
   };
 
   return (
@@ -316,56 +283,88 @@ if (linkTermo && jaAutorizou) {
       <motion.div
         initial={{ scale: 0.97 }}
         animate={{ scale: 1 }}
+        whileHover={{ y: -4 }}
         transition={{ duration: 0.5 }}
-        className={`${theme.container} rounded-[2rem] border overflow-hidden flex flex-col`}
+        className="bg-white rounded-[2rem] border border-slate-100 overflow-hidden flex flex-col shadow-[0_20px_50px_-15px_rgba(10,37,64,0.18)] hover:shadow-[0_28px_60px_-15px_rgba(10,37,64,0.24)] transition-shadow duration-500"
       >
-        {/* TOPO */}
-        <div className={`flex items-center justify-between px-7 py-6 ${theme.headerBg}`}>
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-xl overflow-hidden bg-white shadow-md border flex items-center justify-center">
-              <img
-                src={banco.logo}
-                alt={banco.nome}
-                className="w-full h-full object-contain scale-[1.15]"
-              />
-            </div>
+        {/* FIO DE ACABAMENTO — mesma linguagem da navbar */}
+        <div className={`h-[3px] w-full bg-gradient-to-r ${topBarGradient}`} />
 
-            <div>
-              <h2 className={`text-xl ${theme.headerTitle}`}>{banco.nome}</h2>
-              <p className={`text-[11px] uppercase ${theme.headerSubtitle}`}>
-                {banco.tipo}
-              </p>
-            </div>
+        {/* TOPO */}
+        <div className="flex items-center gap-4 px-7 pt-6 pb-5 bg-gradient-to-b from-slate-50/70 to-white">
+          <div className="w-14 h-14 rounded-2xl overflow-hidden bg-white shadow-sm ring-1 ring-slate-100 flex items-center justify-center shrink-0">
+            <img
+              src={banco.logo}
+              alt={banco.nome}
+              className="w-full h-full object-contain scale-[1.15]"
+            />
+          </div>
+
+          <div className="min-w-0">
+            <h2 className="text-lg font-extrabold text-slate-900 tracking-tight truncate">
+              {banco.nome}
+            </h2>
+            <p
+              className={`text-[10.5px] font-bold uppercase tracking-widest mt-0.5 ${
+                isCarEquity ? "text-slate-500" : "text-emerald-700"
+              }`}
+            >
+              {banco.tipo}
+            </p>
           </div>
         </div>
 
         {/* VALOR */}
-        <div className="px-7 pt-4 pb-8 bg-white">
-          <p className={`text-[10px] uppercase mb-2 ${theme.labelColor}`}>
+        <div className="relative px-7 pt-3 pb-7 bg-white overflow-hidden">
+          {/* Glow decorativo sutil, sem exagero */}
+          <div
+            className={`absolute -right-10 -top-10 w-40 h-40 rounded-full blur-3xl opacity-[0.12] pointer-events-none ${
+              isCarEquity ? "bg-[#0A2540]" : "bg-emerald-500"
+            }`}
+          />
+
+          <p className="relative text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 mb-1.5">
             Crédito a partir de
           </p>
 
-          <div className="flex items-baseline">
-            <span className={`text-3xl mr-1 ${theme.centsColor}`}>R$</span>
-            <h3 className={`text-[3.5rem] font-extrabold ${theme.valueColor}`}>
+          <div className="relative flex items-baseline">
+            <span className="text-2xl mr-1 font-semibold text-slate-300">
+              R$
+            </span>
+            <h3
+              className="text-[3.25rem] leading-none font-extrabold tracking-tight"
+              style={{ color: NAVY }}
+            >
               {valorMinimo}
             </h3>
-            <span className={`text-3xl ${theme.centsColor}`}>,00</span>
+            <span className="text-2xl font-semibold text-slate-300">,00</span>
           </div>
 
-          <div className={`mt-5 inline-flex items-center gap-2 ${theme.taxaBadgeBg} rounded-full px-4 py-1`}>
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-            <p className="text-xs text-slate-500">
-              Taxas a partir de <span className={theme.taxaValueColor}>{taxaTexto}</span>
+          <div className="relative mt-4 inline-flex items-center gap-1.5 bg-emerald-50 border border-emerald-100 rounded-full pl-2.5 pr-3.5 py-1.5">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+            <p className="text-[11px] font-medium text-slate-600">
+              Taxas a partir de{" "}
+              <span className="font-bold text-emerald-700">{taxaTexto}</span>
             </p>
           </div>
         </div>
 
         {/* FAIXA */}
-        <div className={`${theme.bannerBg} py-3 text-center`}>
-          <p className={`text-[11px] uppercase tracking-widest ${theme.bannerTextColor}`}>
+        <div
+          className="py-3 text-center"
+          style={{
+            background: isCarEquity
+              ? "linear-gradient(90deg, #f1f5f9, #ffffff, #f1f5f9)"
+              : `linear-gradient(90deg, ${NAVY_DARK}, ${NAVY})`,
+          }}
+        >
+          <p
+            className={`text-[10.5px] font-semibold uppercase tracking-[0.18em] ${
+              isCarEquity ? "text-slate-600" : "text-white/95"
+            }`}
+          >
             {isCarEquity
-              ? "Use seu carro. Taxas de reduzidas."
+              ? "Use seu carro. Taxas reduzidas."
               : isSaqueCartao
               ? "Transforme limite do cartão em dinheiro"
               : "Simule para ver seu limite real"}
@@ -373,30 +372,41 @@ if (linkTermo && jaAutorizou) {
         </div>
 
         {/* CONDIÇÕES */}
-        <div className="px-7 py-6 flex-1 bg-white space-y-5">
-          <div className={`flex justify-between border-b ${theme.separatorColor} pb-3`}>
-            <span className={theme.conditionLabel}>Parcelamento</span>
-            <span className={theme.conditionValue}>{parcelamentoTexto}</span>
+        <div className="px-7 py-6 flex-1 bg-white space-y-4">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3.5">
+            <span className="flex items-center gap-2 text-slate-500 text-sm">
+              <Clock className="w-4 h-4 text-slate-300" />
+              Parcelamento
+            </span>
+            <span className="font-bold text-slate-800 text-sm">
+              {parcelamentoTexto}
+            </span>
           </div>
 
-          <div className={`flex justify-between border-b ${theme.separatorColor} pb-3`}>
-            <span className={theme.conditionLabel}>Liberação</span>
-            <span className={`${theme.conditionValue} flex items-center gap-1`}>
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3.5">
+            <span className="flex items-center gap-2 text-slate-500 text-sm">
+              <Zap className="w-4 h-4 text-slate-300" />
+              Liberação
+            </span>
+            <span className="font-bold text-slate-800 text-sm flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
               Até 24h úteis
             </span>
           </div>
 
-          <div className="flex justify-between">
-            <span className={theme.conditionLabel}>Processo</span>
-            <span className={theme.conditionValue}>100% Digital</span>
+          <div className="flex items-center justify-between">
+            <span className="flex items-center gap-2 text-slate-500 text-sm">
+              <ShieldCheck className="w-4 h-4 text-slate-300" />
+              Processo
+            </span>
+            <span className="font-bold text-slate-800 text-sm">
+              100% Digital
+            </span>
           </div>
         </div>
 
         {/* BOTÃO */}
-        <div className={`px-7 py-7 ${theme.footerBg}`}>
-          {renderBotao()}
-        </div>
+        <div className="px-7 pb-7 pt-1 bg-white">{renderBotao()}</div>
       </motion.div>
     </motion.div>
   );
