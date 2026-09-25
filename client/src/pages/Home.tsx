@@ -11,20 +11,12 @@ import {
   ChevronDown,
   ArrowRight,
 } from "lucide-react";
-import {
-  getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
-} from "firebase/auth";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import "../firebaseConfig";
 
 // Substitua por uma imagem que remeta ao público CLT (trabalho, carteira assinada, cotidiano)
 import hero from "../assets/hero.jpg";
 
 const HomePage: React.FC = () => {
-  const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -49,25 +41,10 @@ const HomePage: React.FC = () => {
     return () => clearTimeout(timer);
   }, [location.state, location.pathname, navigate]);
 
-  // Login Google
-  const handleGoogleLogin = async () => {
-    try {
-      const auth = getAuth();
-      const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-
-      login({
-        nome: user.displayName || "Usuário Google",
-        email: user.email || "",
-        foto: user.photoURL || "",
-      });
-
-      const from = location.state?.from || "/usuario/dashboard";
-      navigate(from, { replace: true });
-    } catch (error) {
-      console.error("Erro no login com Google:", error);
-    }
+  // Qualquer botão de "simular" leva direto para o dashboard do usuário,
+  // sem exigir login social antes.
+  const irParaDashboard = () => {
+    navigate("/usuario/dashboard");
   };
 
   const beneficios = [
@@ -205,7 +182,7 @@ const HomePage: React.FC = () => {
 
             <div className="flex flex-col sm:flex-row gap-4 pt-1">
               <button
-                onClick={handleGoogleLogin}
+                onClick={irParaDashboard}
                 className="inline-flex items-center justify-center gap-2 bg-white text-[#047857] font-bold py-4 px-10 rounded-full shadow-xl hover:bg-gray-50 hover:shadow-2xl transition-all duration-300 text-lg"
               >
                 Simular agora
@@ -307,7 +284,7 @@ const HomePage: React.FC = () => {
                 </p>
 
                 <button
-                  onClick={handleGoogleLogin}
+                  onClick={irParaDashboard}
                   className="inline-flex items-center gap-2 bg-[#047857] text-white font-bold py-3.5 px-8 rounded-full shadow-lg hover:bg-[#065f46] transition-all duration-300"
                 >
                   Começar simulação
@@ -540,7 +517,7 @@ const HomePage: React.FC = () => {
           </p>
 
           <button
-            onClick={handleGoogleLogin}
+            onClick={irParaDashboard}
             className="bg-white text-[#047857] font-bold py-4 px-12 rounded-full shadow-2xl hover:bg-gray-50 hover:scale-105 transition-all duration-300 text-lg inline-flex items-center gap-2"
           >
             Simular meu crédito CLT
