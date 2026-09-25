@@ -21,7 +21,6 @@ import CRM from "./pages/CRM";
 import MasterCRM from "./pages/MasterCRM";
 import CapturaLead from "./pages/SaibaMais";
 import { AuthProvider, useAuth } from "./context/AuthContext";
-import PrivateRoute from "./components/PrivateRoute";
 import logo from "./assets/Logotipo.png";
 import googleLogo from "./assets/google.png";
 
@@ -56,7 +55,7 @@ function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Detectar scroll para efeito glassmorphism + navbar compacta
+  // Detectar scroll para efeito de sombra + navbar compacta
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 24);
@@ -442,15 +441,8 @@ function AppContent() {
           {/* PÁGINA DE CAPTURA DE LEADS */}
           <Route path="/saiba-mais" element={<CapturaLead />} />
 
-          {/* DASHBOARD GERAL */}
-          <Route
-            path="/usuario/dashboard"
-            element={
-              <PrivateRoute>
-                <UserDashboard />
-              </PrivateRoute>
-            }
-          />
+          {/* DASHBOARD GERAL — acesso liberado, sem exigir login social */}
+          <Route path="/usuario/dashboard" element={<UserDashboard />} />
 
           {/* ROTA NOVO SAQUE */}
           <Route path="/novosaque" element={<NovoSaqueDashboard />} />
