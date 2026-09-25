@@ -376,17 +376,22 @@ export default function PopupTermo(props: PopupTermoProps) {
   // Em vez de pedir anos e meses separadamente, oferecemos duas faixas diretas.
   // Isso continua sendo guardado nos mesmos campos (anosContrato / mesesContrato)
   // para manter compatibilidade com o restante do fluxo.
-  type TempoEmpresa = "6m" | "1a" | null;
+  type TempoEmpresa = "menos6" | "6m" | "1a" | null;
 
   const tempoSelecionado: TempoEmpresa =
     anosContrato === "1" && mesesContrato === "0"
       ? "1a"
       : anosContrato === "0" && mesesContrato === "6"
       ? "6m"
+      : anosContrato === "0" && mesesContrato === "3"
+      ? "menos6"
       : null;
 
-  const selecionarTempoEmpresa = (opcao: "6m" | "1a") => {
-    if (opcao === "6m") {
+  const selecionarTempoEmpresa = (opcao: "menos6" | "6m" | "1a") => {
+    if (opcao === "menos6") {
+      setAnosContrato("0");
+      setMesesContrato("3");
+    } else if (opcao === "6m") {
       setAnosContrato("0");
       setMesesContrato("6");
     } else {
@@ -526,6 +531,12 @@ export default function PopupTermo(props: PopupTermoProps) {
                       <SectionLabel>
                         Há quanto tempo você trabalha na empresa atual?
                       </SectionLabel>
+                      <OptionButton
+                        icon={Clock}
+                        selected={tempoSelecionado === "menos6"}
+                        onClick={() => selecionarTempoEmpresa("menos6")}
+                        label="Menos de 6 meses"
+                      />
                       <OptionButton
                         icon={Clock}
                         selected={tempoSelecionado === "6m"}
