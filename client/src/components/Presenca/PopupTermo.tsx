@@ -51,6 +51,13 @@ type PopupTermoProps = {
   loading: boolean;
 };
 
+// --- API BASE (mesma lógica usada no restante do app) ---
+const API_BASE =
+  typeof window !== "undefined" &&
+  ["localhost", "127.0.0.1"].includes(window.location.hostname)
+    ? "http://localhost:5000"
+    : process.env.REACT_APP_API_URL;
+
 // --- ANIMATIONS ---
 const slideVariants = {
   enter: (direction: number) => ({
@@ -364,16 +371,54 @@ export default function PopupTermo(props: PopupTermoProps) {
     };
   }, [show]);
 
-  // Reseta a etapa sempre que o popup é reaberto
+  // ------------------------------ LOGS / RASTREIO DE ETAPAS ------------------------------
+  // Envia um evento de rastreio para o backend (POST /presenca/rastreio), sem nunca
+  // travar o fluxo do usuário caso a chamada falhe (ex: rede instável).
+  const rastrear = (evento: "clique_simular" | "etapa_1" | "etapa_2", dados: Record<string, any> = {}) => {
+    const payload = {
+      email: emailPres?.trim() || undefined,
+      cpf: cpfPres ? cpfPres.replace(/\D/g, "") || undefined : undefined,
+      evento,
+      dados,
+    };
+
+    // Log local, visível no console do navegador — útil em dev e para depurar em produção
+    console.log(`[CLT][POPUP] Evento: ${evento}`, payload);
+
+    if (!API_BASE) return;
+
+    try {
+      fetch(`${API_BASE}/presenca/rastreio`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }).catch((err) => {
+        console.warn(`[CLT][POPUP][RASTREIO] Falha ao registrar "${evento}":`, err);
+      });
+    } catch (err) {
+      console.warn(`[CLT][POPUP][RASTREIO] Erro inesperado ao registrar "${evento}":`, err);
+    }
+  };
+
+  // Reseta a etapa sempre que o popup é reaberto e registra o clique em "Simular"
   useEffect(() => {
     if (show) {
       setStep(1);
       setErro("");
+
+      // Momento em que o usuário clicou no botão que abriu esta simulação
+      rastrear("clique_simular", {
+        anosContrato,
+        mesesContrato,
+        tamanhoEmpresa,
+        salarioBruto,
+      });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show]);
 
   // ------------------------------ TEMPO DE EMPRESA (simplificado) ------------------------------
-  // Em vez de pedir anos e meses separadamente, oferecemos duas faixas diretas.
+  // Em vez de pedir anos e meses separadamente, oferecemos três faixas diretas.
   // Isso continua sendo guardado nos mesmos campos (anosContrato / mesesContrato)
   // para manter compatibilidade com o restante do fluxo.
   type TempoEmpresa = "menos6" | "6m" | "1a" | null;
@@ -455,6 +500,18 @@ export default function PopupTermo(props: PopupTermoProps) {
 
   const handleNext = () => {
     if (!validarStep()) return;
+
+    // Etapa 1 (Informações Profissionais) concluída com sucesso
+    if (step === 1) {
+      rastrear("etapa_1", {
+        tempoEmpresa: tempoSelecionado,
+        anosContrato,
+        mesesContrato,
+        tamanhoEmpresa,
+        salarioBruto,
+      });
+    }
+
     setStep(step + 1);
   };
 
@@ -469,6 +526,20 @@ export default function PopupTermo(props: PopupTermoProps) {
 
   const handleEnviar = () => {
     if (!validarStep()) return;
+
+    // Etapa 2 (Informações Pessoais) concluída — a partir daqui o dashboard
+    // redireciona o usuário para o WhatsApp.
+    rastrear("etapa_2", {
+      nome: nomePres.trim(),
+      cpf: cpfPres.replace(/\D/g, ""),
+      telefone: telefonePres.replace(/\D/g, ""),
+      email: emailPres.trim(),
+      dataNascimento: dataNascPres,
+      anosContrato,
+      mesesContrato,
+      tamanhoEmpresa,
+      salarioBruto,
+    });
 
     enviar({
       anosContrato: Number(anosContrato),
