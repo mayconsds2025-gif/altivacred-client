@@ -82,6 +82,10 @@ function Navbar() {
     return null;
   }
 
+  // 🔒 O botão "Fale conosco" não deve aparecer dentro do dashboard do usuário
+  // (lá o próprio fluxo de simulação já leva direto para o WhatsApp)
+  const isUserDashboard = location.pathname === "/usuario/dashboard";
+
   // Links que apontam para seções da Home (scroll suave), não páginas separadas
   const sectionLinks = [
     { name: "Como funciona", id: "como-funciona" },
@@ -213,15 +217,17 @@ function Navbar() {
 
           {/* Actions Desktop */}
           <div className="hidden md:flex items-center gap-3">
-            <a
-              href={WHATSAPP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-emerald-200 text-emerald-700 text-sm font-semibold hover:bg-emerald-50 hover:border-emerald-300 transition-colors duration-300"
-            >
-              <MessageCircle className="w-4 h-4" />
-              Fale conosco
-            </a>
+            {!isUserDashboard && (
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-emerald-200 text-emerald-700 text-sm font-semibold hover:bg-emerald-50 hover:border-emerald-300 transition-colors duration-300"
+              >
+                <MessageCircle className="w-4 h-4" />
+                Fale conosco
+              </a>
+            )}
 
             {user ? (
               <>
@@ -331,27 +337,31 @@ function Navbar() {
                 </motion.div>
               ))}
 
-              <motion.div
-                initial={{ opacity: 0, x: -16 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: sectionLinks.length * 0.06 }}
-              >
-                <a
-                  href={WHATSAPP_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-2 px-4 py-3.5 rounded-xl text-[15px] font-medium text-emerald-700 hover:bg-emerald-50 transition-all"
+              {!isUserDashboard && (
+                <motion.div
+                  initial={{ opacity: 0, x: -16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: sectionLinks.length * 0.06 }}
                 >
-                  <MessageCircle className="w-4 h-4" />
-                  Fale conosco
-                </a>
-              </motion.div>
+                  <a
+                    href={WHATSAPP_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex items-center gap-2 px-4 py-3.5 rounded-xl text-[15px] font-medium text-emerald-700 hover:bg-emerald-50 transition-all"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    Fale conosco
+                  </a>
+                </motion.div>
+              )}
 
               <motion.div
                 initial={{ opacity: 0, x: -16 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: (sectionLinks.length + 1) * 0.06 }}
+                transition={{
+                  delay: (sectionLinks.length + (isUserDashboard ? 0 : 1)) * 0.06,
+                }}
                 className="pt-4 mt-3 border-t border-gray-100"
               >
                 {user ? (
