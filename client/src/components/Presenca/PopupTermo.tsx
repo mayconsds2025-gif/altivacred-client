@@ -12,11 +12,13 @@ import {
   Mail,
   Calendar,
   Check,
-  DollarSign,
   Building2,
 } from "lucide-react";
 
 // --- TYPES ---
+// Observação: salarioBruto / setSalarioBruto continuam no tipo por compatibilidade
+// com o restante do fluxo (UserDashboard ainda os declara e repassa), mas este
+// popup não os utiliza mais — o campo de salário bruto foi removido da Etapa 1.
 type PopupTermoProps = {
   show: boolean;
   onClose: () => void;
@@ -107,15 +109,6 @@ const maskDate = (v: string) =>
     .slice(0, 8)
     .replace(/^(\d{2})(\d)/, "$1/$2")
     .replace(/^(\d{2})\/(\d{2})(\d)/, "$1/$2/$3");
-
-const maskCurrency = (value: string) => {
-  let v = value.replace(/\D/g, "");
-  v = (Number(v) / 100).toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  });
-  return v;
-};
 
 const validarDataNasc = (data: string) => {
   const digits = data.replace(/\D/g, "");
@@ -351,8 +344,6 @@ export default function PopupTermo(props: PopupTermoProps) {
     setAnosContrato,
     mesesContrato,
     setMesesContrato,
-    salarioBruto,
-    setSalarioBruto,
     tamanhoEmpresa,
     setTamanhoEmpresa,
     enviar,
@@ -411,7 +402,6 @@ export default function PopupTermo(props: PopupTermoProps) {
         anosContrato,
         mesesContrato,
         tamanhoEmpresa,
-        salarioBruto,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -446,7 +436,7 @@ export default function PopupTermo(props: PopupTermoProps) {
   };
 
   const validarStep = () => {
-    // ETAPA 1: Informações Profissionais
+    // ETAPA 1: Informações Profissionais (tempo de empresa + número de funcionários)
     if (step === 1) {
       if (!tempoSelecionado) {
         setErro("Selecione há quanto tempo você trabalha na empresa.");
@@ -455,12 +445,6 @@ export default function PopupTermo(props: PopupTermoProps) {
 
       if (!tamanhoEmpresa) {
         setErro("Selecione o número de funcionários da empresa.");
-        return false;
-      }
-
-      const valorNumerico = Number(salarioBruto.replace(/\D/g, ""));
-      if (!salarioBruto || valorNumerico === 0) {
-        setErro("Informe o seu salário bruto mensal.");
         return false;
       }
     }
@@ -508,7 +492,6 @@ export default function PopupTermo(props: PopupTermoProps) {
         anosContrato,
         mesesContrato,
         tamanhoEmpresa,
-        salarioBruto,
       });
     }
 
@@ -538,13 +521,11 @@ export default function PopupTermo(props: PopupTermoProps) {
       anosContrato,
       mesesContrato,
       tamanhoEmpresa,
-      salarioBruto,
     });
 
     enviar({
       anosContrato: Number(anosContrato),
       mesesContrato: Number(mesesContrato),
-      salarioBruto: Number(salarioBruto.replace(/\D/g, "")) / 100,
       tamanhoEmpresa,
       nome: nomePres.trim(),
       cpf: cpfPres.replace(/\D/g, ""),
@@ -588,7 +569,7 @@ export default function PopupTermo(props: PopupTermoProps) {
 
               <ProgressBar value={(step / totalSteps) * 100} />
 
-              <div className="mt-2 min-h-[280px]">
+              <div className="mt-2 min-h-[220px]">
                 <AnimatePresence mode="wait">
                   {/* ETAPA 1: INFORMAÇÕES PROFISSIONAIS */}
                   {step === 1 && (
@@ -655,19 +636,6 @@ export default function PopupTermo(props: PopupTermoProps) {
                           }
                           label="100 ou mais funcionários"
                         />
-                      </div>
-
-                      <div className="mt-6">
-                        <SectionLabel>Renda mensal bruta</SectionLabel>
-                        <Input
-                          placeholder="Salário Bruto"
-                          value={salarioBruto}
-                          onChange={(v) => setSalarioBruto(maskCurrency(v))}
-                          icon={DollarSign}
-                        />
-                        <p className="text-xs text-gray-400 px-1 -mt-2">
-                          Valor total recebido sem descontos (holerite).
-                        </p>
                       </div>
                     </motion.div>
                   )}
