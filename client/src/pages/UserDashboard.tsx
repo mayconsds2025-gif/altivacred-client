@@ -15,7 +15,7 @@ import presencaLogo from "../assets/CLT.png";
 import bannerPropostas from "../assets/MinhasPropostas.png";
 
 // ⚠️ Ajuste este número para o WhatsApp comercial correto, se necessário.
-const WHATSAPP_NUMERO = "5511977191411";
+const WHATSAPP_NUMERO = "5511959273817";
 const WHATSAPP_MENSAGEM =
   "Olá, gostaria de obter minha simulação do Crédito do Trabalhador";
 
