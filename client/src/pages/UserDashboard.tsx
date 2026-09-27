@@ -1,5 +1,5 @@
 // src/pages/UserDashboard.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ShieldCheck, Zap, Clock3 } from "lucide-react";
 
 // CARDS
@@ -15,7 +15,7 @@ import presencaLogo from "../assets/CLT.png";
 import bannerPropostas from "../assets/MinhasPropostas.png";
 
 // ⚠️ Ajuste este número para o WhatsApp comercial correto, se necessário.
-const WHATSAPP_NUMERO = "5511959273817";
+const WHATSAPP_NUMERO = "5511977191411";
 const WHATSAPP_MENSAGEM =
   "Olá, gostaria de obter minha simulação do Crédito do Trabalhador";
 
@@ -48,6 +48,13 @@ export default function UserDashboard() {
     ["localhost", "127.0.0.1"].includes(window.location.hostname)
       ? "http://localhost:5000"
       : process.env.REACT_APP_API_URL;
+
+  // ------------------------------ ABRIR POPUP AUTOMATICAMENTE ------------------------------
+  // Assim que o usuário entra no dashboard, o popup de simulação já abre sozinho,
+  // sem precisar que ele clique no card primeiro.
+  useEffect(() => {
+    setShowPopupPresencaCLT(true);
+  }, []);
 
   // ------------------------------ SALVAR PROGRESSO (LEAD) ------------------------------
   const salvarProgressoBackend = async (extra: any = {}) => {
