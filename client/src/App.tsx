@@ -64,7 +64,7 @@ function BrandMark({ light = false }: { light?: boolean }) {
       <img
         src={logo}
         alt="ManjeriCo"
-        className="h-16 w-auto max-w-[230px] object-contain sm:h-20 sm:max-w-[270px]"
+        className="h-20 w-auto max-w-[300px] object-contain sm:h-24 sm:max-w-[340px]"
       />
     </a>
   );
