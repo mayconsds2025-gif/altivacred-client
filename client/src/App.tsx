@@ -64,7 +64,7 @@ function BrandMark({ light = false }: { light?: boolean }) {
       <img
         src={logo}
         alt="ManjeriCo"
-        className="h-12 w-auto max-w-[190px] object-contain sm:h-14"
+        className="h-16 w-auto max-w-[230px] object-contain sm:h-20 sm:max-w-[270px]"
       />
     </a>
   );
@@ -133,8 +133,8 @@ export default function App() {
         Seu próximo hobby começa aqui <span className="mx-2 text-[#C96A3B]">✳</span> Cultive bons momentos
       </div>
 
-      <header className="sticky top-0 z-40 border-b border-[#173D2B]/10 bg-[#F8F4E9]/95 backdrop-blur-md">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8">
+      <header className="sticky top-0 z-40 border-b border-black/5 bg-white shadow-sm">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-3 sm:px-8 sm:py-4">
           <BrandMark />
           <nav className="hidden items-center gap-7 md:flex" aria-label="Navegação principal">
             {navItems.map((item) => (
