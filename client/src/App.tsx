@@ -35,8 +35,8 @@ import {
  *    Se preferir, mova o @import para o index.html / index.css.
  */
 
-const MERCADO_LIVRE_URL = "https://www.mercadolivre.com.br/";
-const INSTAGRAM_URL = "https://www.instagram.com/";
+const MERCADO_LIVRE_URL = "https://www.mercadolivre.com.br/kit-jardinagem-iniciante-com-vasos-e-ferramentas/up/MLBU5565398724";
+const INSTAGRAM_URL = "https://www.instagram.com/manjerico.oficial";
 const PRICE = "R$ 78,90";
 
 const faqs = [
@@ -236,7 +236,23 @@ export default function App() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const buy = () => window.open(MERCADO_LIVRE_URL, "_blank", "noopener,noreferrer");
+  
+const buy = () => {
+  // Registra o clique no Pixel da Meta
+  const fbq = (window as any).fbq;
+
+  if (typeof fbq === "function") {
+    fbq("trackCustom", "CliqueMercadoLivre");
+  }
+
+  // Abre o anúncio do Mercado Livre
+  window.open(
+    MERCADO_LIVRE_URL,
+    "_blank",
+    "noopener,noreferrer"
+  );
+};
+
 
   const navItems = [
     { label: "O kit", id: "o-kit" },
