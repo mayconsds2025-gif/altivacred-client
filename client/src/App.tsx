@@ -144,17 +144,23 @@ function FontStyles() {
   );
 }
 
-function BrandMark({ light = false }: { light?: boolean }) {
+function BrandMark({ light = false, compact = false }: { light?: boolean; compact?: boolean }) {
   return (
     <a
       href="#inicio"
-      className={`inline-flex items-center ${light ? "rounded-xl bg-[#F8F4E9] px-3 py-2" : ""}`}
+      className={`inline-flex items-center ${light ? "rounded-2xl bg-white px-4 py-3" : ""}`}
       aria-label="ManjeriCo — início"
     >
       <img
         src={logo}
         alt="ManjeriCo"
-        className={`w-auto object-contain ${light ? "h-14 max-w-[240px]" : "h-14 max-w-[220px] sm:h-16 sm:max-w-[260px]"}`}
+        className={`w-auto object-contain transition-all duration-300 ${
+          light
+            ? "h-24 max-w-[260px] sm:h-28"
+            : compact
+            ? "h-16 max-w-[260px] sm:h-[4.5rem]"
+            : "h-20 max-w-[300px] sm:h-28 sm:max-w-[340px]"
+        }`}
       />
     </a>
   );
@@ -255,14 +261,14 @@ export default function App() {
 
       {/* Header */}
       <header
-        className={`sticky top-0 z-40 border-b transition-all duration-300 ${
+        className={`sticky top-0 z-40 border-b bg-white transition-all duration-300 ${
           scrolled
-            ? "border-[#173D2B]/10 bg-[#F8F4E9]/90 shadow-[0_8px_30px_-18px_rgba(23,61,43,0.35)] backdrop-blur-xl"
-            : "border-transparent bg-[#F8F4E9]"
+            ? "border-[#173D2B]/10 shadow-[0_8px_30px_-18px_rgba(23,61,43,0.35)]"
+            : "border-[#173D2B]/5"
         }`}
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-3 sm:px-8">
-          <BrandMark />
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-2 sm:px-8">
+          <BrandMark compact={scrolled} />
           <nav className="hidden items-center gap-9 lg:flex" aria-label="Navegação principal">
             {navItems.map((item) => (
               <button
@@ -290,7 +296,7 @@ export default function App() {
           </button>
         </div>
         {menuOpen && (
-          <div className="border-t border-[#173D2B]/10 bg-[#F8F4E9] px-5 pb-5 pt-3 lg:hidden">
+          <div className="border-t border-[#173D2B]/10 bg-white px-5 pb-5 pt-3 lg:hidden">
             <div className="flex flex-col">
               {navItems.map((item) => (
                 <button
