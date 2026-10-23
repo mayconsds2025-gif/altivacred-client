@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import logo from "./assets/Logotipo.png";
 import {
   ArrowRight,
   Check,
@@ -19,7 +20,7 @@ import {
  * Antes de publicar:
  * 1. Troque MERCADO_LIVRE_URL pelo link real do anúncio.
  * 2. Confirme preço, composição do kit, prazo/frete e políticas.
- * 3. Substitua o wordmark provisório pelo arquivo oficial do logo, sem alterá-lo.
+ * 3. O logo oficial é importado de ./assets/Logotipo.png; mantenha o arquivo nesse caminho.
  */
 
 const MERCADO_LIVRE_URL = "https://www.mercadolivre.com.br/";
@@ -55,13 +56,16 @@ function scrollToSection(id: string) {
 
 function BrandMark({ light = false }: { light?: boolean }) {
   return (
-    <a href="#inicio" className="inline-flex items-center gap-2.5" aria-label="ManjeriCo — início">
-      <span className={`grid h-10 w-10 place-items-center rounded-full ${light ? "bg-[#F8F4E9]" : "bg-[#E8EDE4]"}`}>
-        <Sprout className="h-6 w-6 text-[#173D2B]" strokeWidth={1.8} />
-      </span>
-      <span className={`text-[1.55rem] font-semibold tracking-[-0.06em] ${light ? "text-[#F8F4E9]" : "text-[#173D2B]"}`}>
-        Manjeri<span className="text-[#C96A3B]">Co</span>
-      </span>
+    <a
+      href="#inicio"
+      className={`inline-flex items-center ${light ? "rounded-xl bg-[#F8F4E9] px-3 py-2" : ""}`}
+      aria-label="ManjeriCo — início"
+    >
+      <img
+        src={logo}
+        alt="ManjeriCo"
+        className="h-12 w-auto max-w-[190px] object-contain sm:h-14"
+      />
     </a>
   );
 }
