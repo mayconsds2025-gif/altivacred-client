@@ -48,7 +48,7 @@ const faqs = [
   {
     question: "O que vem no kit?",
     answer:
-      "O kit inclui um vaso de aproximadamente 13 × 11 cm, 1,2 litro de substrato, três ferramentas de jardinagem e sachês de sementes. Confira as fotos e a descrição do anúncio para confirmar a composição vigente.",
+      "O kit inclui um vaso de aproximadamente 13 × 11 cm, Substrato para Hortaliças, três ferramentas de jardinagem e sachês de sementes. Confira as fotos e a descrição do anúncio para confirmar a composição vigente.",
   },
   {
     question: "Preciso comprar mais alguma coisa?",
@@ -256,14 +256,14 @@ export default function App() {
 
   const specs = [
     { value: "13 × 11", unit: "cm", label: "Vaso incluso" },
-    { value: "1,2", unit: "litro", label: "De substrato" },
+    { value: "Substrato", unit: "litro", label: "para Hortaliças" },
     { value: "3", unit: "itens", label: "Ferramentas de jardinagem" },
     { value: "+", unit: "", label: "Sachês de sementes" },
   ];
 
   const kitItems = [
     { icon: Sprout, tone: "bg-[#E8EDE4]", iconColor: "text-[#47734C]", title: "Sachês de sementes", text: "O ponto de partida do seu cultivo.", tag: "01" },
-    { icon: Package, tone: "bg-[#F0E1D4]", iconColor: "text-[#C96A3B]", title: "1,2 L de substrato", text: "A base certa para o plantio.", tag: "02" },
+    { icon: Package, tone: "bg-[#F0E1D4]", iconColor: "text-[#C96A3B]", title: "Substrato para Hortaliças", text: "A base certa para o plantio.", tag: "02" },
     { icon: Leaf, tone: "bg-[#E5D7BE]", iconColor: "text-[#173D2B]", title: "Vaso 13 × 11 cm", text: "Espaço para a planta se desenvolver.", tag: "03" },
     { icon: Check, tone: "bg-[#DCE6D8]", iconColor: "text-[#47734C]", title: "3 ferramentas", text: "Praticidade em cada etapa do cuidado.", tag: "04" },
   ];
