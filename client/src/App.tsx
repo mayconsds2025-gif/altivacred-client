@@ -37,7 +37,7 @@ import {
 
 const MERCADO_LIVRE_URL = "https://www.mercadolivre.com.br/kit-jardinagem-iniciante-com-vasos-e-ferramentas/up/MLBU5565398724";
 const INSTAGRAM_URL = "https://www.instagram.com/manjerico.oficial";
-const PRICE = "R$ 78,90";
+const PRICE = "R$ 29,00";
 
 const faqs = [
   {
